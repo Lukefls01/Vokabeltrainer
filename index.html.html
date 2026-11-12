@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vokabeltrainer Headlight 2</title>
+<meta name="theme-color" content="#d9161d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#d9161d; --red-d:#a80f14; --yellow:#ffc400; --bg:#efe6e6; --card:#ffffff; --ink:#1e1b1c; --muted:#706a6c;
+  --line:#e6dcdc; --green:#1f9d55; --green-l:#e3f6ea; --orange:#e98a00; --orange-l:#fff1dc; --wrong:#d43a2f; --wrong-l:#fde6e4;
+  --blue:#2563c9; --shadow:0 2px 0 rgba(0,0,0,.06),0 6px 18px rgba(80,20,20,.08); --r:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.4;min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input{font:inherit}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px}
+
+/* Header */
+header.top{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--red),#e8343a);color:#fff;box-shadow:0 2px 12px rgba(120,10,10,.25)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;height:62px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:40px;height:40px;border-radius:12px;background:#fff;color:var(--red);display:grid;place-items:center;font-weight:900;font-size:18px;letter-spacing:-.5px;box-shadow:inset 0 -3px 0 var(--yellow)}
+.brand b{display:block;font-size:17px;line-height:1.1;font-weight:900}
+.brand small{display:block;font-size:12px;opacity:.85;white-space:nowrap}
+.chips{display:flex;align-items:center;gap:6px}
+.chip{background:rgba(255,255,255,.18);border-radius:999px;padding:5px 10px;font-weight:800;font-size:13px;white-space:nowrap}
+.icon-btn{width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:17px}
+
+main{padding:16px 0 110px}
+h2.sec-title{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:22px 4px 10px;font-weight:900}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+.muted{color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
+
+/* Tabs */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 18px rgba(80,20,20,.06)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px 10px}
+nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:14px;font-size:12px;font-weight:800;color:var(--muted)}
+nav.tabs button span{font-size:22px;line-height:1.1;filter:grayscale(.6);opacity:.8}
+nav.tabs button.on{color:var(--red);background:#fdeeee}
+nav.tabs button.on span{filter:none;opacity:1}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:14px;font-weight:900;font-size:16px;background:var(--red);color:#fff;box-shadow:0 4px 0 var(--red-d);transition:transform .06s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--red-d)}
+.btn.sec{background:#fff;color:var(--ink);box-shadow:0 0 0 2px var(--line) inset,0 4px 0 var(--line)}
+.btn.sec:active{box-shadow:0 0 0 2px var(--line) inset,0 1px 0 var(--line)}
+.btn.yellow{background:var(--yellow);color:#3b2a00;box-shadow:0 4px 0 #c99800}
+.btn.green{background:var(--green);box-shadow:0 4px 0 #157a40}
+.btn.block{width:100%}
+.btn.small{padding:9px 12px;font-size:14px;border-radius:12px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+
+/* Progress */
+.bar{height:10px;border-radius:99px;background:#f1e7e7;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--yellow),#ffdb4d);transition:width .4s}
+.bar.green>i{background:linear-gradient(90deg,#28b463,#4cd182)}
+.stars{color:var(--yellow);letter-spacing:1px;font-size:15px}
+.stars .off{color:#dccfcf}
+
+/* Overview */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.ring{--p:0;width:74px;height:74px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),#efe5e5 0);display:grid;place-items:center}
+.ring>div{width:58px;height:58px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:900;font-size:17px}
+.hero h3{margin:0 0 4px;font-size:18px}
+.stat-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pill{background:#f7efef;border-radius:999px;padding:4px 10px;font-size:13px;font-weight:800;color:#5b4f51}
+
+/* Path */
+.unit-banner{border-radius:var(--r);color:#fff;padding:14px 16px;margin:26px 0 6px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+.unit-banner .num{font-size:12px;font-weight:900;opacity:.9;letter-spacing:.06em;text-transform:uppercase}
+.unit-banner h3{margin:0;font-size:19px;font-weight:900}
+.unit-banner .bar{background:rgba(255,255,255,.3);margin-top:8px;height:8px}
+.unit-banner .bar>i{background:#fff}
+.path{position:relative;padding:10px 0 4px}
+.node{position:relative;display:flex;flex-direction:column;align-items:center;width:150px;margin:8px auto;text-align:center}
+.node.l{transform:translateX(-62px)}.node.r{transform:translateX(62px)}
+.node .disc{--p:0;--c:var(--red);width:76px;height:76px;border-radius:50%;padding:6px;background:conic-gradient(var(--c) calc(var(--p)*1%),#e8dcdc 0);box-shadow:0 5px 0 rgba(0,0,0,.08)}
+.node .disc>div{width:100%;height:100%;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:25px;font-weight:900;box-shadow:inset 0 -5px 0 rgba(0,0,0,.18)}
+.node.locked .disc{filter:grayscale(1);opacity:.55}
+.node.passed .disc>div{background:linear-gradient(160deg,var(--c),var(--c))}
+.node.current .disc{animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.node .lbl{margin-top:7px;font-weight:900;font-size:14px;line-height:1.15}
+.node .sub{font-size:12px;color:var(--muted);font-weight:700}
+.node.boss .disc{width:90px;height:90px}
+.node.current{margin-top:36px}
+.node .go{position:absolute;top:-30px;background:#fff;border-radius:10px;padding:3px 9px;font-size:12px;font-weight:900;color:var(--red);box-shadow:var(--shadow);white-space:nowrap}
+
+/* Lists */
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);text-align:left;width:100%}
+.item .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:22px;flex:none;color:#fff;font-weight:900}
+.item b{display:block;font-size:16px}
+.item small{display:block;color:var(--muted);font-size:13px;font-weight:700}
+.item .right{text-align:right;flex:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.acc{background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.acc>button.head{display:flex;width:100%;align-items:center;gap:12px;padding:12px 14px;text-align:left}
+.acc .body{display:none;border-top:1px solid var(--line);padding:6px 10px 10px}
+.acc.open .body{display:block}
+.acc .chev{transition:transform .2s;color:var(--muted);font-weight:900}
+.acc.open .chev{transform:rotate(90deg)}
+.srow{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid #f3ecec}
+.srow:last-child{border-bottom:0}
+.srow .grow b{font-size:15px}
+.mini{display:flex;gap:6px}
+.mini button{background:#f7efef;border-radius:10px;padding:7px 10px;font-weight:800;font-size:13px}
+
+/* Overlay screens */
+#overlay{position:fixed;inset:0;z-index:40;background:var(--bg);display:none;overflow:auto}
+#overlay.on{display:block}
+.ov-top{position:sticky;top:0;background:var(--bg);z-index:2}
+.ov-top .wrap{display:flex;align-items:center;gap:12px;height:60px}
+.xbtn{width:40px;height:40px;border-radius:12px;background:#fff;box-shadow:var(--shadow);font-size:18px;font-weight:900;color:var(--muted);flex:none}
+.ov-top .bar{flex:1;height:14px}
+.count{font-weight:900;font-size:14px;color:var(--muted);min-width:52px;text-align:right}
+
+/* Quiz */
+.qcard{background:#fff;border-radius:22px;box-shadow:var(--shadow);padding:20px 18px 18px;margin-top:6px;text-align:center}
+.qlabel{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.qflag{display:inline-block;font-size:12px;font-weight:900;border-radius:8px;padding:2px 8px;margin-left:6px;vertical-align:1px}
+.qflag.en{background:#e7efff;color:var(--blue)}.qflag.de{background:#fff3cc;color:#7a5a00}
+.qword{font-size:clamp(24px,6.5vw,34px);font-weight:900;margin:14px 0 4px;line-height:1.2;word-break:break-word}
+.qhint{font-size:14px;color:var(--muted);font-weight:700;min-height:1px}
+.say{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#e7efff;font-size:18px;vertical-align:middle;margin-left:6px}
+.qbody{margin-top:16px}
+.opts{display:grid;gap:10px}
+.opt{background:#fff;border-radius:16px;padding:15px 14px;font-weight:800;font-size:17px;box-shadow:0 0 0 2px var(--line) inset,0 4px 0 var(--line);text-align:left;display:flex;gap:12px;align-items:center}
+.opt .k{width:26px;height:26px;border-radius:8px;background:#f5eded;display:grid;place-items:center;font-size:13px;color:var(--muted);flex:none}
+.opt:active{transform:translateY(2px)}
+.opt.ok{background:var(--green-l);box-shadow:0 0 0 2px var(--green) inset,0 4px 0 var(--green)}
+.opt.bad{background:var(--wrong-l);box-shadow:0 0 0 2px var(--wrong) inset,0 4px 0 var(--wrong)}
+.opt.dim{opacity:.5}
+.tf{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tf .opt{justify-content:center;font-size:18px}
+.tf-pair{font-size:clamp(20px,5.5vw,28px);font-weight:900;margin:12px 0 2px}
+.tf-pair .eq{color:var(--muted);margin:0 8px}
+.inp{width:100%;font-size:20px;font-weight:800;padding:15px 16px;border-radius:16px;border:2px solid var(--line);background:#fff;outline:none;color:var(--ink)}
+.inp:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,201,.12)}
+.inp.ok{border-color:var(--green);background:var(--green-l)}
+.inp.bad{border-color:var(--wrong);background:var(--wrong-l)}
+.inp.near{border-color:var(--orange);background:var(--orange-l)}
+.uml{display:flex;gap:8px;margin-top:10px;justify-content:center}
+.uml button{width:46px;height:42px;border-radius:12px;background:#fff;box-shadow:0 0 0 2px var(--line) inset;font-weight:900;font-size:18px}
+.vfields{display:grid;gap:10px}
+.vfields label{font-size:13px;font-weight:900;color:var(--muted);text-align:left;display:block;margin:0 0 4px 4px}
+.actions{display:flex;gap:10px;margin-top:16px}
+.actions .btn{flex:1}
+.skip{display:block;margin:14px auto 0;color:var(--muted);font-weight:800;font-size:14px;text-decoration:underline}
+
+/* Scramble */
+.slots{min-height:62px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;padding:10px;border-radius:16px;background:#fff;border:2px dashed var(--line)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.tile{min-width:44px;height:48px;padding:0 12px;border-radius:12px;background:#fff;font-weight:900;font-size:20px;box-shadow:0 0 0 2px var(--line) inset,0 4px 0 var(--line)}
+.tile.w{font-size:17px}
+.tile.used{visibility:hidden}
+.slots .tile{background:#e7efff;box-shadow:0 0 0 2px #bcd0f5 inset,0 3px 0 #bcd0f5}
+
+/* Feedback */
+.fb{position:fixed;left:0;right:0;bottom:0;z-index:45;transform:translateY(110%);transition:transform .22s ease}
+.fb.on{transform:none}
+.fb .wrap{padding:16px 14px 18px}
+.fb-in{border-radius:22px 22px 0 0;padding:4px 0 0}
+.fb.ok{background:var(--green-l)}.fb.near{background:var(--orange-l)}.fb.bad{background:var(--wrong-l)}
+.fb h4{margin:0 0 4px;font-size:20px;font-weight:900}
+.fb.ok h4{color:var(--green)}.fb.near h4{color:var(--orange)}.fb.bad h4{color:var(--wrong)}
+.fb p{margin:2px 0;font-weight:700}
+.fb .sol{font-size:18px;font-weight:900}
+.fb .row{margin-top:12px}
+.fb .btn{flex:1}
+.linkbtn{font-weight:800;font-size:14px;color:var(--muted);text-decoration:underline;padding:8px}
+
+/* Result */
+.result{text-align:center;padding-top:20px}
+.big-emoji{font-size:64px;line-height:1}
+.result h2{margin:8px 0 2px;font-size:26px;font-weight:900}
+.score-big{font-size:54px;font-weight:900;color:var(--red);line-height:1.1}
+.result .stars{font-size:34px;margin:6px 0}
+.mistakes{text-align:left;margin-top:16px}
+.mrow{display:flex;justify-content:space-between;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line);font-weight:700}
+.mrow:last-child{border-bottom:0}
+.mrow .en{font-weight:900}
+
+/* Flashcards */
+.fc-wrap{perspective:1200px;margin-top:10px}
+.fc{position:relative;height:300px;transform-style:preserve-3d;transition:transform .45s;cursor:pointer}
+.fc.flip{transform:rotateY(180deg)}
+.fc .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:24px;background:#fff;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.fc .back{transform:rotateY(180deg);background:#fffbea}
+.fc .w{font-size:clamp(26px,7vw,38px);font-weight:900;line-height:1.2;word-break:break-word}
+.fc .tap{position:absolute;bottom:14px;font-size:13px;color:var(--muted);font-weight:800}
+.seg{display:inline-flex;background:#fff;border-radius:12px;padding:3px;box-shadow:0 0 0 2px var(--line) inset}
+.seg button{padding:7px 10px;border-radius:9px;font-weight:900;font-size:13px;color:var(--muted)}
+.seg button.on{background:var(--red);color:#fff}
+
+/* Word list */
+.wl-row{display:flex;gap:10px;align-items:center;background:#fff;border-radius:14px;padding:10px 12px;margin-bottom:8px;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.wl-row .en{font-weight:900}
+.wl-row small{display:block;color:var(--muted);font-weight:700;font-size:12px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;background:#e3d6d6}
+.dot.b1{background:#f6b4b0}.dot.b2{background:#ffd666}.dot.b3{background:#9bdcb0}.dot.b4,.dot.b5{background:var(--green)}
+.wl-sec{font-weight:900;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 4px 8px}
+
+/* Sheet */
+#sheet{position:fixed;inset:0;z-index:60;display:none}
+#sheet.on{display:block}
+#sheet .dim{position:absolute;inset:0;background:rgba(30,10,10,.45);animation:fade .2s}
+#sheet .panel{position:absolute;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;animation:up .22s ease}
+#sheet .panel .wrap{padding:18px 16px 24px}
+@keyframes up{from{transform:translateY(40%);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fade{from{opacity:0}}
+.sheet-h{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.sheet-h h3{margin:0;font-size:20px;font-weight:900}
+.optrow{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.optrow button{padding:9px 13px;border-radius:12px;background:#fff;font-weight:800;box-shadow:0 0 0 2px var(--line) inset}
+.optrow button.on{background:var(--red);color:#fff;box-shadow:none}
+.toggle{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:14px;padding:13px 14px;margin-bottom:8px;font-weight:800}
+.sw{width:50px;height:30px;border-radius:99px;background:#dccfcf;position:relative;transition:.2s;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:var(--green)}.sw.on::after{left:23px}
+
+/* Toast */
+#toast{position:fixed;left:50%;top:76px;transform:translateX(-50%) translateY(-20px);opacity:0;z-index:80;background:#2b2224;color:#fff;padding:10px 16px;border-radius:14px;font-weight:800;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translateX(-50%)}
+
+/* Games */
+.hud{display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:16px;margin:4px 0 8px}
+.hud .lives{letter-spacing:2px}
+.sky{position:relative;height:min(46vh,380px);border-radius:22px;overflow:hidden;background:radial-gradient(ellipse at 50% 120%,#5b2a8a 0,#20123f 55%,#0c0a1f 100%);box-shadow:var(--shadow)}
+.sky .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.7}
+.ground{position:absolute;left:0;right:0;bottom:0;height:18px;background:linear-gradient(#3fb36b,#1d7a45)}
+.meteor{position:absolute;left:50%;top:0;transform:translate(-50%,-110%);background:linear-gradient(160deg,#ff9a3c,#e2401c);color:#fff;font-weight:900;font-size:clamp(16px,4.6vw,21px);padding:10px 16px;border-radius:18px;box-shadow:0 0 24px rgba(255,120,40,.7);white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis}
+.meteor::before{content:"";position:absolute;left:50%;top:-40px;width:14px;height:44px;transform:translateX(-50%);background:linear-gradient(transparent,rgba(255,180,80,.7));border-radius:8px;z-index:-1}
+.meteor.boom{animation:boom .35s forwards}
+@keyframes boom{to{transform:translate(-50%,var(--y)) scale(1.8);opacity:0;filter:brightness(2)}}
+.shake{animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.flash{position:absolute;inset:0;pointer-events:none;opacity:0}
+.flash.red{background:rgba(255,40,40,.35);animation:fl .4s}
+@keyframes fl{0%{opacity:1}100%{opacity:0}}
+.gopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.gopts .opt{justify-content:center;text-align:center;font-size:15px;padding:14px 8px;min-height:62px}
+.mem{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+@media(min-width:560px){.mem{grid-template-columns:repeat(4,1fr)}}
+.mc{height:96px;border-radius:16px;perspective:800px}
+.mc .in{position:relative;width:100%;height:100%;transition:transform .35s;transform-style:preserve-3d}
+.mc.open .in,.mc.done .in{transform:rotateY(180deg)}
+.mc .f,.mc .b{position:absolute;inset:0;border-radius:16px;display:grid;place-items:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:6px;text-align:center;font-weight:900;font-size:14px;line-height:1.15;word-break:break-word}
+.mc .f{background:linear-gradient(150deg,var(--red),#ef5a46);color:#fff;font-size:30px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15)}
+.mc .b{transform:rotateY(180deg);background:#fff;box-shadow:0 0 0 2px var(--line) inset}
+.mc .b.en{background:#eef4ff}.mc .b.de{background:#fff8dc}
+.mc.done .b{box-shadow:0 0 0 3px var(--green) inset;background:var(--green-l)}
+.game-card{display:flex;gap:14px;align-items:center}
+.game-card .gi{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:34px;flex:none}
+.hs{font-size:13px;font-weight:800;color:var(--muted)}
+.empty{text-align:center;padding:24px 10px;color:var(--muted);font-weight:700}
+.confetti{position:fixed;top:-10px;width:10px;height:14px;z-index:90;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+
+/* Schreibfeld */
+.pad{position:relative;height:220px;border-radius:18px;background-color:#fffef7;box-shadow:0 0 0 2px var(--line) inset,var(--shadow);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+ background-image:linear-gradient(to right,transparent 30px,#f2a7a7 30px,#f2a7a7 32px,transparent 32px),repeating-linear-gradient(to bottom,transparent 0,transparent 72px,#b9c9ea 72px,#b9c9ea 74px),repeating-linear-gradient(to bottom,transparent 0,transparent 50px,#e1e8f6 50px,#e1e8f6 51px,transparent 51px,transparent 74px)}
+.pad canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.pad-ph{position:absolute;left:44px;top:36px;color:#b7b0a8;font-weight:800;font-size:18px;pointer-events:none}
+.reading{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:16px;font-size:16px}
+.spin{width:30px;height:30px;border-radius:50%;border:4px solid #e6dcdc;border-top-color:var(--red);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.selfcheck{margin-top:14px;text-align:center}
+.sc-sol{font-size:clamp(24px,6.5vw,32px);font-weight:900;margin:8px 0 12px;color:var(--blue)}
+.sc-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.sc-btns .btn{padding:12px 6px;font-size:15px}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand"><div class="logo">H2</div><div><b>Vokabeltrainer</b><small>English G Headlight 2</small></div></div>
+  <div class="chips"><span class="chip" id="xpChip"></span><span class="chip" id="streakChip"></span><button class="icon-btn" data-act="settings" title="Einstellungen">⚙️</button></div>
+</div></header>
+<main id="view"></main>
+<nav class="tabs"><div class="wrap">
+  <button data-act="tab" data-tab="path" class="on"><span>🗺️</span>Lernpfad</button>
+  <button data-act="tab" data-tab="tests"><span>📝</span>Tests</button>
+  <button data-act="tab" data-tab="learn"><span>🃏</span>Lernen</button>
+  <button data-act="tab" data-tab="games"><span>🎮</span>Spiele</button>
+</div></nav>
+<div id="overlay"></div>
+<div id="fb" class="fb"></div>
+<div id="sheet"></div>
+<div id="toast"></div>
+<script>
+/* Vokabeln: English G Headlight 2 – nur Wortpaare (Englisch | Deutsch | Hinweis | n = nicht an Kommas trennen) */
+const RAW_UNITS = [
+{ id:"u1", title:"Unit 1", name:"Together again", sections:[
+ { t:"Lead-in", w:`mountain|Berg
+lake|(Binnen-)See
+barbecue|Grillfest, Grillparty
+summer camp|(Sommer-)Ferienlager
+camp|(Zelt-)Lager
+walk around|umhergehen
+they weren't|sie waren nicht|= were not
+so great|so toll
+weather|Wetter
+warm|warm
+cold|kalt|Adjektiv
+sunny|sonnig
+rainy|regnerisch
+rain|Regen|Nomen
+rain|regnen|Verb
+agree with sb./sth.|jm. zustimmen; mit etwas einverstanden sein`},
+ { t:"Theme 1", w:`Give me five!|Gib mir fünf!|Abklatschen
+I went|ich ging / ich bin gegangen|Vergangenheit von go
+I didn't want to …|ich wollte nicht …|= did not
+I stayed|ich blieb / ich bin geblieben|Vergangenheit von stay
+funny|witzig, komisch
+poor Ellie|(die) arme Ellie
+yesterday|gestern
+I read|ich las / ich habe gelesen|Vergangenheit von read – gesprochen [red]
+make friends|Freunde finden|simple past: made
+have to do sth.|etwas tun müssen
+class|Unterricht; Kurs
+I met|ich traf / ich habe getroffen|Vergangenheit von meet
+feel bored|Langeweile haben|simple past: felt
+bored|gelangweilt
+she got|sie bekam / sie hat bekommen|Vergangenheit von get
+its name|sein Name / ihr Name|bei Tieren und Dingen
+quite|ziemlich
+at break|in der Pause|zwischen den Schulstunden
+alone|allein
+long|lang
+short|kurz|Länge, Zeit`},
+ { t:"Theme 2", w:`newsletter|Mitteilungsblatt, Informationsblatt
+lunchtime|Mittagszeit
+cricket|Kricket|Mannschaftssportart
+act|Theater spielen, schauspielern
+we did|wir machten, wir taten|Vergangenheit von do
+Christmas|Weihnachten
+Christmas pantomime|Theaterstück zur Weihnachtszeit|britisch
+healthy|gesund
+yummy|lecker|umgangssprachlich
+experiment|Experiment
+rock climbing|Felsklettern
+a three-day trip|ein dreitägiger Ausflug
+Which club?|Welcher Klub?
+Which club did you join?|In welchen Klub bist du eingetreten?
+circle|Kreis`},
+ { t:"Focus on language", w:`channel|Kanal|Fernsehen
+drive|(mit dem Auto) fahren|simple past: drove
+be homesick|Heimweh haben|auch: feel homesick
+present|Gegenwart|Zeitform
+past|Vergangenheit
+rule|Regel
+sentence|Satz
+ask sb. about sth.|sich bei jm. nach etwas erkundigen
+in the end|schließlich, zum Schluss
+winner|Gewinner/in
+each|jeder/jede/jedes (einzelne)`},
+ { t:"Story", w:`a few|ein paar, einige
+for a few minutes|ein paar Minuten (lang)
+next|als Nächstes
+without|ohne
+answer|antworten, beantworten|Verb
+answer|Antwort|Nomen
+when|als|zeitlich, Vergangenheit
+at first|zuerst, am Anfang
+get sth.|(sich) etwas holen, (sich) etwas besorgen|simple past: got
+school yard|Schulhof
+surprised|überrascht
+jealous|eifersüchtig, neidisch
+just like Berry|genau wie Berry
+she didn't know what to say|sie wusste nicht, was sie sagen sollte||n
+eye|Auge
+What's the matter?|Was ist los? / Was ist denn?
+die|sterben
+that's why|deshalb, darum
+cry|weinen
+thank sb.|sich bei jm. bedanken
+unfriendly|unfreundlich`},
+ { t:"Skills training", w:`collect|sammeln
+tip|Tipp
+opposite|Gegenteil
+finish|beenden, zu Ende machen|Verb
+uncool|uncool
+unfit|nicht fit
+unhappy|unglücklich
+unhealthy|ungesund
+uninteresting|uninteressant
+unsure|unsicher
+unwelcome|unerwünscht, unwillkommen
+wear|tragen, anhaben|Kleidung – simple past: wore
+scarf|Schal|Plural: scarves
+strange|seltsam, sonderbar
+milkshake|Milchshake
+angry|wütend
+shy|scheu, schüchtern`}
+]},
+{ id:"u2", title:"Unit 2", name:"Neighbours", sections:[
+ { t:"Lead-in", w:`neighbour|Nachbar/in
+post office|Post, Postamt
+garage|(Auto-)Werkstatt|auch: Garage
+electronics|Elektronik
+lane|Gasse, Weg, Sträßchen
+car park|Parkplatz
+hair|Haar, Haare|Singular: Your hair is …
+newsagent|Zeitungshändler/in
+letter box|Briefkasten
+hairdresser|Frisör/in
+Who did Adam meet?|Wen hat Adam getroffen? / Wen traf Adam?
+bus stop|Bushaltestelle
+traffic lights|Ampel|Plural
+flower|Blume; Blüte
+neighbourhood|Nachbarschaft, Gegend, Viertel
+we don't have any …|wir haben kein/e …`},
+ { t:"Theme 1", w:`festival|Fest
+Britain|Großbritannien|auch: Great Britain
+popular|beliebt, populär
+more popular|beliebter
+milk|Milch
+Would you like some tea?|Möchtest du (etwas) Tee?
+I'll have …|ich nehme …|beim Essen, im Restaurant
+around here|hier in der Nähe
+collar|Halsband
+Good boy.|Braver Junge.|zum Hund; auch: Good dog.
+suddenly|plötzlich, auf einmal
+firework|Feuerwerkskörper
+fireworks|Feuerwerk|Plural
+Get lost!|Verschwinde! / Verschwindet!
+run|rennen, laufen|simple past: ran
+as fast as he could|so schnell (wie) er konnte
+be scared (of)|Angst haben (vor)
+We'll find him.|Wir werden ihn finden.|= we will
+half an hour|eine halbe Stunde
+far|weit (entfernt)
+the dogs' home|das Hundeheim
+owner|Besitzer/in
+tail|Schwanz`},
+ { t:"Theme 2", w:`tell (about)|erzählen (von), berichten (über)|simple past: told
+a dog that could be Buster|ein Hund, der Buster sein könnte||n
+he could|er könnte|auch: er konnte
+ask sb. to do sth.|jn. bitten, etwas zu tun||n
+of course|natürlich, selbstverständlich
+this morning|heute Morgen|auch: this afternoon / this evening
+I see.|Ach so. / Aha. / Verstehe.
+open|offen, geöffnet
+tomorrow|morgen
+take the train|den Zug nehmen|simple past: took
+train|Zug, Eisenbahn
+station|Bahnhof|auch: train station
+ear|Ohr
+check|(über)prüfen, kontrollieren
+check a website|auf einer Website nachschauen
+adopt|adoptieren; (Tier) bei sich aufnehmen
+lovely|schön; nett, lieb
+blind|blind
+go for a walk|einen Spaziergang machen, spazieren gehen
+budgie|Wellensittich`},
+ { t:"Focus on language", w:`bonfire|Freudenfeuer, (großes) Feuer
+celebrate|feiern
+costume|Kostüm, Verkleidung
+potato|Kartoffel|Plural: potatoes
+clothes|Kleidung, Kleidungsstücke|immer Plural
+lantern|Laterne
+cocoa|Kakao
+your own lanterns|eure eigenen Laternen
+witch|Hexe
+candy|Süßigkeiten|amerikanisch
+take photos|Fotos machen
+mystery|Geheimnis
+someone|jemand|auch: somebody`},
+ { t:"Story", w:`Penny for the guy!|Einen Penny für die Guy-Fawkes-Puppe!|britisch
+penny|Penny|kleinste britische Münze
+pushchair|(Kinder-)Sportwagen; Buggy
+newspaper|(Tages-)Zeitung
+head|Kopf
+smile|lächeln
+along the road|die Straße entlang
+mask|Maske
+bark (at sb.)|(jn. an)bellen
+sniff (at)|schnüffeln, schnuppern (an)
+Here we go!|Jetzt geht's los!
+point (at/to)|zeigen, deuten (auf)
+change clothes|sich umziehen
+It wasn't them.|Sie waren es nicht.
+jacket|Jacke, Jackett
+turn right|(nach) rechts abbiegen|auch: turn left
+Let's have a look.|Lass uns mal nachschauen.
+call|rufen; anrufen; nennen
+mine|meine, meiner, meins
+jump (up)|(hoch)springen
+up|hinauf, hoch
+down|hinunter, herunter
+pull|ziehen
+pocket|Tasche|an Kleidungsstücken
+those boys|die Jungen dort, jene Jungen
+only|erst|auch: nur
+hand|Hand
+danger|Gefahr`},
+ { t:"Skills training", w:`do better|besser abschneiden
+penfriend|Brieffreund/in
+at least|wenigstens, zumindest
+directions|Wegbeschreibung(en)|Plural
+tell sb. the way|jm. den Weg beschreiben
+ask sb. the way|jn. nach dem Weg fragen
+cross|überqueren|Verb
+metre|Meter
+past the shop|am Geschäft vorbei
+Thanks very much.|Vielen Dank.
+bank|Bank|Geldinstitut
+toilet roll|Rolle Toilettenpapier
+mummy|Mumie`}
+]},
+{ id:"u3", title:"Unit 3", name:"Teen talk", sections:[
+ { t:"Lead-in", w:`teen talk|Teenagergespräche
+talk|Vortrag, Rede; Gespräch
+perfect|perfekt|Betonung auf der 1. Silbe
+chill|relaxen, sich ausruhen|umgangssprachlich
+stuff|Zeug, Kram|umgangssprachlich
+ski|Ski laufen, Ski fahren
+do chores|(Haus-)Arbeiten erledigen
+also|auch
+survey|Umfrage
+How much?|Wie viel?
+much|viel
+go out|rausgehen, weggehen; ausgehen
+nobody|niemand`},
+ { t:"Theme 1", w:`magazine|Zeitschrift
+a lot (of)|viel, viele; sehr
+mean|geizig|auch: gemein
+older than me|älter als ich
+What should I do?|Was sollte ich tun?
+frustrated|frustriert
+until|bis|zeitlich
+if|wenn, falls|Bedingung
+extra|zusätzlich, Extra-
+hoover|staubsaugen
+fill|füllen
+dishwasher|Geschirrspülmaschine
+empty|leeren|Verb
+empty|leer|Adjektiv
+enough|genug
+cut|schneiden; (Rasen) mähen|simple past: cut
+grass|Gras; Rasen
+tidy|aufräumen|Verb
+tidy|ordentlich|Adjektiv
+not … either|auch nicht
+£10 a week|10 Pfund pro Woche
+do a paper round|Zeitungen austragen
+Go for it!|Nichts wie ran!
+for example|zum Beispiel`},
+ { t:"Theme 2", w:`nearly|fast
+still|(immer) noch; trotzdem
+ice skating|Schlittschuhlaufen
+ice rink|Schlittschuhbahn
+It doesn't matter.|Es ist egal. / Das ist egal.
+matter|von Bedeutung sein, wichtig sein
+entrance|Eingang; Zutritt
+queue|(Warte-)Schlange
+glove|Handschuh
+ice skates|Schlittschuhe|Plural
+winter|Winter
+cap|Kappe, (Schirm-)Mütze
+blouse|Bluse
+boot|Stiefel`},
+ { t:"Focus on language", w:`activity|Aktivität, Tätigkeit|Betonung auf der 2. Silbe
+day out|(Tages-)Ausflug|Plural: days out
+adult|Erwachsene/r
+mile|Meile|ca. 1,6 km
+kilometre|Kilometer
+cheap|billig, preiswert
+the most sports|die meisten Sportarten
+near to the city|nah am Stadtzentrum
+worse|schlechter, schlimmer
+careful|vorsichtig; sorgfältig; aufmerksam
+ice hockey|Eishockey
+earth|Erde
+beautiful|(wunder)schön
+worst|am schlechtesten, am schlimmsten`},
+ { t:"Story", w:`grow|wachsen|simple past: grew
+Money doesn't grow on trees.|Das Geld liegt nicht auf der Straße.
+part|Teil
+It's a deal!|Abgemacht!
+deal|Geschäft; Vereinbarung
+not … anything|nichts
+toy|Spielzeug
+rubbish|(Haus-)Müll, Abfall
+get rid of sth.|etwas loswerden
+recycle|recyceln, wiederverwerten
+dartboard|Dartscheibe
+not … any more|nicht mehr
+charity shop|Secondhand-Laden für wohltätige Zwecke
+charity|wohltätige Organisation
+as|als, während
+save|sparen|Geld, Zeit
+den|Versteck; Hobbyraum
+comfortable|bequem, gemütlich
+dart|(Wurf-)Pfeil
+the 90s|die Neunzigerjahre
+dress|Kleid
+arrive|ankommen
+get full|voll werden
+match|Spiel, Wettkampf
+spend|verbringen; ausgeben|Zeit / Geld – simple past: spent
+task|Aufgabe`},
+ { t:"Skills training", w:`give a talk|einen Vortrag halten
+free-time activities|Freizeitaktivitäten
+e.g.|z. B., zum Beispiel|geschrieben
+coach|Trainer/in
+relaxing|entspannend, beruhigend
+relax|sich entspannen
+gear|Ausrüstung
+etc.|usw., und so weiter
+cartoon|Zeichentrickfilm; Comic
+comedy|Comedyshow; Komödie
+crime series|Krimiserie
+documentary|Dokumentarfilm
+soap|Seife; Seifenoper
+reality|Realität, Wirklichkeit
+like sth. best|etwas am liebsten mögen
+find out about sth.|sich über etwas informieren, etwas herausfinden
+interested (in)|interessiert (an)
+vote for sb.|für jn. stimmen
+leader|Leiter/in, Anführer/in
+ticket office|Kartenschalter`}
+]},
+{ id:"u4", title:"Unit 4", name:"Feeling good", sections:[
+ { t:"Lead-in", w:`the way you live|deine Lebensweise
+how many?|wie viele?
+less than|weniger als
+junk food|Junkfood|ungesundes Essen
+mostly|meistens; hauptsächlich
+sugary|süß, zuckerhaltig
+sugar|Zucker
+pick|(aus)wählen, aussuchen
+dessert|Nachspeise, Dessert
+sleep|Schlaf|Nomen
+active|aktiv
+advice|Rat, Ratschlag, Ratschläge|Singular: some advice
+Keep it up!|Weiter so!
+high|hoch
+low|niedrig, tief
+back|Rücken; Rückseite
+arm|Arm
+fist|Faust
+knee|Knie|das k spricht man nicht`},
+ { t:"Theme 1", w:`baked potato|Ofenkartoffel
+bake|backen
+pasty|Pastete|mit Fleisch- oder Gemüsefüllung
+meat|Fleisch
+I've had|ich habe gehabt|have
+I've never had …|ich habe (noch) nie … gehabt
+before|vorher; zuvor
+lunch box|Brotdose
+carrot|Möhre, Karotte
+German|Deutsche, Deutscher|Person
+a packet of crisps|eine Packung Chips, eine Tüte Chips
+chance|Chance, Gelegenheit
+doctor|Arzt, Ärztin
+the good news is that …|die gute Nachricht ist, dass …||n
+dark|dunkel
+cereals|Frühstücksflocken, Getreideflocken|Plural
+smoothie|Smoothie
+peanut butter|Erdnussbutter
+butter|Butter
+vitamin|Vitamin
+I've drunk|ich habe getrunken|drink
+none|keine, keiner, keines
+I've eaten|ich habe gegessen|eat`},
+ { t:"Theme 2", w:`skive|(Schule) schwänzen|umgangssprachlich
+ill|krank
+stomach|Bauch; Magen
+have a stomach ache|Bauchschmerzen haben
+have a headache|Kopfschmerzen haben
+he has lost his job|er hat seine Arbeitsstelle verloren
+move (to)|(um)ziehen (nach)
+I have a sore throat.|Ich habe Halsschmerzen.
+throat|Hals
+sore|schmerzhaft
+cold|Erkältung|Nomen
+temperature|Temperatur; Fieber
+appointment|Termin; Verabredung
+I'm not feeling well.|Ich fühle mich nicht gut.
+air|Luft`},
+ { t:"Focus on language", w:`just|gerade (eben)
+miss|verpassen|Bus, Zug …
+not … yet|noch nicht
+be thirsty|durstig sein, Durst haben
+whole|ganz, ganze
+wash|waschen; sauber machen
+already|schon
+everything|alles`},
+ { t:"Story", w:`technician|Techniker/in
+disappointed (with)|enttäuscht (von)
+kitten|Kätzchen, junge Katze
+make sb. do sth.|jn. dazu bringen, etwas zu tun||n
+watch sb. do sth.|zusehen, wie jemand etwas tut||n
+stop by|vorbeischauen
+phone call|Anruf, Telefonanruf
+miss sb. so much|jn. so sehr vermissen
+helpless|hilflos
+something like this|so etwas|auch: like that
+Go on.|Ach, komm! / Na los, mach schon!||n
+have a chat|sich unterhalten, eine Unterhaltung führen
+forget about sth.|etwas vergessen, nicht mehr an etwas denken
+situation|Situation`},
+ { t:"Skills training", w:`tall|groß (Person); hoch (Gebäude)
+short|klein|Person
+straight|gerade; glatt (Haare)
+sporty|sportlich
+kind|nett, freundlich|Adjektiv
+clever|schlau, klug
+entry|Eintrag|auch: dictionary entry
+e-friend|E-Mail-Freund/in
+north|Norden; nördlich
+easy-going|gelassen, locker
+especially|insbesondere
+hang out|rumhängen, abhängen|hang, hung, hung
+total|total
+subject|Thema; Betreff (in E-Mails)
+look forward to|sich freuen auf
+personality|Persönlichkeit; Charakter
+ending|Endung; Ende (einer Geschichte)
+archery|Bogenschießen
+dive|tauchen, eintauchen
+climb|klettern (auf)
+ballroom dancing|Standardtanz
+enjoy|genießen
+step|Schritt|beim Gehen
+gymnastics|Turnen, Gymnastik
+judo|Judo
+choose|(aus)wählen|chose, chosen
+outdoor sport|Sport im Freien
+embarrassed|verlegen`}
+]},
+{ id:"u5", title:"Unit 5", name:"Dartmoor adventures", sections:[
+ { t:"Lead-in", w:`mud|Schlamm, Matsch
+national park|Nationalpark
+river|Fluss
+stone|Stein
+mysterious|geheimnisvoll
+autumn|Herbst|das n spricht man nicht
+everywhere|überall
+bite|beißen|bit, bitten
+drive carefully|vorsichtig fahren
+owl|Eule
+fox|Fuchs
+badger|Dachs
+in the old days|früher
+hairy|behaart, haarig
+across Dartmoor|(quer) über das Dartmoor
+smell|riechen`},
+ { t:"Theme 1", w:`the weather will be good|das Wetter wird gut sein
+it won't rain|es wird nicht regnen|= it will not rain
+forecast|(Wetter-)Vorhersage
+foggy|nebelig
+fog|Nebel
+take|(mit)nehmen; bringen|took, taken
+useful|nützlich, hilfreich
+get lost|sich verirren, sich verlaufen
+curious about sth.|neugierig auf etwas
+tent|Zelt
+pack|packen, einpacken
+cream|Creme|auch: Sahne
+pyjamas|Schlafanzug|immer Plural
+hairdryer|Föhn, Haartrockner
+rucksack|Rucksack
+list|Liste`},
+ { t:"Theme 2", w:`maze|Irrgarten, Labyrinth
+start|Anfang, Start
+finish|Ziel|beim Sport – Nomen
+clear|klar, deutlich
+if|ob|I don't know if …
+forward|vorwärts, nach vorne
+straight on|geradeaus (weiter)
+safety|Sicherheit
+compass|Kompass
+whistle|(Triller-)Pfeife
+plastic|Plastik, Kunststoff
+first-aid kit|Erste-Hilfe-Set, Verbandskasten
+first aid|Erste Hilfe`},
+ { t:"Focus on language", w:`cloud|Wolke
+cloudy|wolkig, bewölkt
+spring|Frühling
+put sth. on|etwas anziehen; etwas aufsetzen|Kleidung, Hut
+leave sth.|etwas zurücklassen|left, left
+litter|Abfall
+bin|(Müll-)Eimer
+pick sth. up|etwas aufheben
+police|Polizei|immer Plural
+future|Zukunft
+married (to)|verheiratet (mit)
+single|ledig, alleinstehend
+season|Jahreszeit
+degree|Grad
+cool|kühl
+windy|windig
+wind|Wind
+snowy|verschneit, schneebedeckt
+snow|Schnee
+freezing|eisig, eiskalt
+freeze|frieren, gefrieren|froze, frozen
+minus|minus`},
+ { t:"Story", w:`bridge|Brücke
+cottage|Häuschen, Hütte
+stand|stehen; sich hinstellen|stood, stood
+cross|Kreuz|Nomen
+prize|Preis, Gewinn|im Wettbewerb`},
+ { t:"The two-tor adventure", w:`get (to)|gelangen, (hin)kommen (nach)
+ground|(Erd-)Boden
+hound|(Jagd-)Hund
+joke|Witz, Scherz|Nomen
+round|rund
+scarecrow|Vogelscheuche
+scream|schreien
+shout|rufen
+voice|Stimme`},
+ { t:"Skills training", w:`platform|Bahnsteig
+passenger|Passagier/in, Fahrgast
+on time|pünktlich
+leave|abfahren, losfahren|Zug, Bus
+fire|Feuer
+ambulance|Krankenwagen|Betonung auf der 1. Silbe
+emergency|Notfall
+emergency services|Rettungsdienste|Plural
+accident|Unfall
+hurt|verletzen; wehtun|hurt, hurt
+get hurt|sich verletzen|auch: be hurt = verletzt sein
+correct|korrigieren, berichtigen
+postcard|Postkarte
+capital letter|Großbuchstabe
+letter|Buchstabe|auch: Brief
+mistake|Fehler
+kind (of)|Art, Sorte|Nomen
+secret|geheim; Geheimnis
+stamp|Stempel; Briefmarke
+happy ending|Happy End
+flag|Fahne, Flagge`}
+]},
+{ id:"u6", title:"Unit 6", name:"A journey in time", sections:[
+ { t:"Lead-in", w:`journey|Reise
+pilgrim|Pilger/in
+Protestant|Protestant/in; evangelisch|Betonung auf der 1. Silbe
+sail|segeln; (mit dem Schiff) fahren
+famous|berühmt
+sailor|Seemann; Matrose, Matrosin
+Catholic|Katholik/in; katholisch|Betonung auf der 1. Silbe
+attack|angreifen
+ship|Schiff
+Spanish|spanisch; Spanisch
+fight|kämpfen|fought, fought
+against|gegen
+on the coast|an der Küste
+king|König
+legend|Legende, Sage
+sword|Schwert|das w spricht man nicht
+become|werden|became, become
+magician|Zauberer, Zauberin
+Roman|Römer/in; römisch
+make sth. your own|etwas in deinen Besitz bringen
+all over the country|überall im Land, im ganzen Land
+living history|Geschichte zum Anfassen`},
+ { t:"Theme", w:`project|Projekt|Betonung auf der 1. Silbe
+topic|Thema
+historic|historisch|berühmt, bedeutend
+event|Ereignis
+finally|schließlich, endlich
+pirate|Pirat/in
+believe (in sth.)|glauben (an etwas)
+league|Liga|Sport
+castle|Burg
+come alive|lebendig werden, (wieder) aufleben
+experience sth.|etwas erleben, etwas erfahren
+discover|entdecken
+daily|täglich
+captain|Kapitän/in
+boat|Boot; Schiff`},
+ { t:"Story", w:`I'm glad|ich bin froh
+take notes|(sich) Notizen machen
+miss|übersehen, überhören|nicht mitbekommen
+stairs|Treppe|immer Plural
+light|Licht, Lampe
+it's smelly|es stinkt
+hall|Gang, Korridor
+You're joking!|Du machst wohl Witze!
+joke|Witze machen, scherzen|Verb
+a long time ago|vor langer Zeit
+amazing|erstaunlich
+so far|bis jetzt, bis hierher
+Join the club.|Da bist du nicht der Einzige.
+whisper|flüstern
+explain sth. to sb.|jm. etwas erklären
+drummer|Trommler/in
+by mistake|aus Versehen
+What a mess!|Was für ein Durcheinander! / Was für ein Chaos!
+sky|Himmel
+rhyme|Reim|Nomen
+rhyme|(sich) reimen|Verb
+carriage|Kutsche
+horse|Pferd
+switch sth. on|etwas einschalten|switch sth. off = ausschalten
+magic|Zauberei, Magie
+begin|anfangen, beginnen|began, begun
+build|bauen|built, built
+step|Stufe|Treppe
+bowls|Rasenbowling|Spiel
+destroy|zerstören, vernichten
+ruins|Ruine|Plural
+cave|Höhle
+sir|mein Herr|höfliche Anrede
+transport|Fortbewegungsmittel; Beförderung
+silly|dumm, blöd; albern
+lighthouse|Leuchtturm
+magical|magisch; zauberhaft
+view|Aussicht, Blick
+statue|Statue
+fat|dick, fett
+hold|halten|held, held
+great for making friends|großartig, um Freunde zu finden||n`},
+ { t:"Skills training", w:`prepare (for)|vorbereiten; sich vorbereiten (auf)
+expert|Experte, Expertin|Betonung auf der 1. Silbe
+research|erforschen, untersuchen, recherchieren
+illustration|Abbildung, Illustration
+the most interesting information to me|die interessanteste Information für mich
+island|Insel
+puppet|Puppe|Handpuppe, Marionette`}
+]}
+];
+
+/* Unregelmäßige Verben: Grundform | simple past | past participle | Deutsch */
+const RAW_VERBS = `be|was/were|been|sein
+bite|bit|bitten|beißen
+bring|brought|brought|bringen, mitbringen
+buy|bought|bought|kaufen
+come|came|come|kommen
+cut|cut|cut|schneiden; (Rasen) mähen
+do|did|done|tun, machen
+drink|drank|drunk|trinken
+drive|drove|driven|(mit dem Auto) fahren
+eat|ate|eaten|essen
+fall|fell|fallen|fallen, hinfallen
+feed|fed|fed|füttern
+feel|felt|felt|fühlen; sich fühlen
+find|found|found|finden
+forget|forgot|forgotten|vergessen
+get|got|got|bekommen; holen; werden; gelangen
+give|gave|given|geben
+go|went|gone|gehen
+grow|grew|grown|wachsen
+have|had|had|haben
+hear|heard|heard|hören
+hide|hid|hidden|verstecken; sich verstecken
+hurt|hurt|hurt|verletzen; wehtun
+know|knew|known|wissen; kennen
+leave|left|left|abfahren; weggehen; zurücklassen
+lose|lost|lost|verlieren
+make|made|made|machen
+meet|met|met|treffen; kennenlernen
+put|put|put|legen, stellen
+read|read|read|lesen
+ride|rode|ridden|reiten; (Rad) fahren
+ring|rang|rung|läuten, klingeln
+run|ran|run|rennen, laufen
+say|said|said|sagen
+see|saw|seen|sehen
+send|sent|sent|schicken, senden
+set the table|set|set|den Tisch decken
+show|showed|shown|zeigen
+shut up|shut|shut|den Mund halten
+sing|sang|sung|singen
+sit|sat|sat|sitzen
+sleep|slept|slept|schlafen
+speak|spoke|spoken|sprechen
+spend|spent|spent|ausgeben (Geld); verbringen (Zeit)
+swim|swam|swum|schwimmen
+take|took|taken|nehmen; mitnehmen; bringen
+tell|told|told|erzählen, berichten
+think|thought|thought|denken
+understand|understood|understood|verstehen
+wake|woke|woken|wecken
+wear|wore|worn|tragen, anhaben (Kleidung)
+win|won|won|gewinnen
+write|wrote|written|schreiben
+begin|began|begun|anfangen, beginnen
+become|became|become|werden
+build|built|built|bauen
+choose|chose|chosen|(aus)wählen
+fight|fought|fought|kämpfen
+fly|flew|flown|fliegen
+freeze|froze|frozen|frieren, gefrieren
+hang out|hung (out)|hung (out)|rumhängen
+hold|held|held|halten
+mean|meant|meant|bedeuten; meinen
+stand|stood|stood|stehen`;
+
+</script>
+<script>
+'use strict';
+/* ================= Helfer ================= */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const rnd = n => Math.floor(Math.random() * n);
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pick = a => a[rnd(a.length)];
+const uniq = a => [...new Set(a)];
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+function wpick(items, weights) { const s = weights.reduce((a, b) => a + b, 0); let r = Math.random() * s; for (let i = 0; i < items.length; i++) { r -= weights[i]; if (r <= 0) return items[i]; } return items[items.length - 1]; }
+function lev(a, b) { if (a === b) return 0; const m = a.length, n = b.length; if (!m) return n; if (!n) return m; let prev = Array.from({ length: n + 1 }, (_, i) => i); for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; } return prev[n]; }
+
+/* ================= Vergleichslogik ================= */
+function norm(s) {
+  s = String(s).toLowerCase().replace(/[’`´]/g, "'");
+  s = s.replace(/\bwon't\b/g, 'will not').replace(/\bcan't\b/g, 'can not').replace(/\bcannot\b/g, 'can not').replace(/n't\b/g, ' not')
+    .replace(/'ll\b/g, ' will').replace(/'ve\b/g, ' have').replace(/'m\b/g, ' am').replace(/'re\b/g, ' are')
+    .replace(/\b(it|what|that|he|she|there|here)'s\b/g, '$1 is').replace(/\blet's\b/g, 'let us');
+  s = s.replace(/\b(sb|sth|jm|jn|jdm|jdn|jmd)\./g, ' ');
+  s = s.replace(/…|\.\.\./g, ' ');
+  s = s.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
+  s = s.trim().replace(/^(to|the|a|an|der|die|das|ein|eine|einen)\s+(?=\S)/, '');
+  return s.replace(/[^a-z0-9]/g, '');
+}
+function splitTop(s, seps) {
+  const out = []; let depth = 0, cur = '';
+  for (const ch of s) {
+    if (ch === '(') depth++; else if (ch === ')') depth = Math.max(0, depth - 1);
+    if (depth === 0 && seps.includes(ch)) { out.push(cur); cur = ''; continue; }
+    cur += ch;
+  }
+  out.push(cur);
+  return out.map(x => x.trim()).filter(Boolean);
+}
+function rawVariants(str, lang, noComma) {
+  let s = str.replace(/\(=[^)]*\)/g, ' ');
+  if (lang === 'de') s = s.replace(/([A-Za-zÄÖÜäöüß-]+)\/(in|r|e|s)\b/g, (m, a, b) => a + (noComma ? ' / ' : ', ') + a + b);
+  const seps = (lang === 'de' && noComma) ? ['/', ';'] : ['/', ';', ','];
+  const res = [];
+  for (let p of splitTop(s, seps)) {
+    p = p.replace(/^etwa:\s*/, '');
+    const a = p.replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim();
+    const b = p.replace(/[()]/g, '').replace(/\s+/g, ' ').trim();
+    [a, b].forEach(x => { if (x && !res.includes(x)) res.push(x); });
+    if (lang === 'en') { const m = a.match(/^(i|you|he|she|it|we|they)('ve|'ll)?\s+(\S+)$/i); if (m && !res.includes(m[3])) res.push(m[3]); }
+  }
+  return res;
+}
+
+/* ================= Daten aufbereiten ================= */
+const UNITS = [], SECS = {}, W = {}, VERBS = [], V = {};
+const UCOL = { u1: '#e2231a', u2: '#ef7d00', u3: '#249a4a', u4: '#0d97ab', u5: '#2d6cdf', u6: '#8a4fd8' };
+RAW_UNITS.forEach(u => {
+  const unit = { id: u.id, title: u.title, name: u.name, secs: [], words: [], col: UCOL[u.id] };
+  u.sections.forEach((s, si) => {
+    const sid = u.id + 's' + si;
+    const sec = { id: sid, unit: u.id, t: s.t, words: [], idx: si };
+    const seen = {};
+    s.w.split('\n').map(x => x.trim()).filter(Boolean).forEach(line => {
+      const [en = '', de = '', h = '', f = ''] = line.split('|').map(x => x.trim());
+      let id = sid + ':' + en + (h ? '~' + h : '');
+      if (seen[id]) id += '~' + (++seen[id]); else seen[id] = 1;
+      const w = { id, en, de, h, ns: f === 'n', unit: u.id, sec: sid };
+      w.enRaw = rawVariants(en, 'en'); w.deRaw = rawVariants(de, 'de', w.ns);
+      w.enN = uniq(w.enRaw.map(norm).filter(Boolean)); w.deN = uniq(w.deRaw.map(norm).filter(Boolean));
+      w.enP = w.enRaw[0] || en;
+      w.canEn = w.enN.some(x => x.length <= 26); w.canDe = w.deN.some(x => x.length <= 24);
+      if (/^[A-Za-z'-]{3,12}$/.test(w.enP)) w.scr = 'letters';
+      else { const parts = w.enP.split(/\s+/); if (parts.length >= 3 && parts.length <= 8) w.scr = 'words'; }
+      W[id] = w; sec.words.push(id); unit.words.push(id);
+    });
+    SECS[sid] = sec; unit.secs.push(sid);
+  });
+  UNITS.push(unit);
+});
+const ALL_WORDS = UNITS.flatMap(u => u.words);
+const deMap = new Map(), enMap = new Map();
+ALL_WORDS.forEach(id => { const w = W[id];
+  w.deN.forEach(k => { if (!deMap.has(k)) deMap.set(k, new Set()); deMap.get(k).add(id); });
+  w.enN.forEach(k => { if (!enMap.has(k)) enMap.set(k, new Set()); enMap.get(k).add(id); });
+});
+function acceptEn(w) { const s = new Set(w.enN); w.deN.forEach(k => deMap.get(k).forEach(id => W[id].enN.forEach(x => s.add(x)))); return [...s]; }
+function acceptDe(w) { const s = new Set(w.deN); w.enN.forEach(k => enMap.get(k).forEach(id => W[id].deN.forEach(x => s.add(x)))); return [...s]; }
+function hintFor(w, promptLang) {
+  if (!w.h) return '';
+  if (promptLang === 'de') { const hn = norm(w.h); if (w.enN.some(k => k.length >= 3 && hn.includes(k))) return ''; }
+  return w.h;
+}
+
+RAW_VERBS.split('\n').map(x => x.trim()).filter(Boolean).forEach(line => {
+  const [inf, past, part, de] = line.split('|').map(x => x.trim());
+  const id = 'v:' + inf;
+  const v = { id, inf, past, part, de, isVerb: true };
+  const vs = s => { const r = rawVariants(s, 'en'); const n = uniq(r.map(norm)); if (s.includes('/')) n.push(norm(s)); return n; };
+  v.infN = vs(inf); v.pastN = vs(past); v.partN = vs(part); v.deN = uniq(rawVariants(de, 'de').map(norm));
+  v.pastD = past.replace(/\s*\(([^)]*)\)/, ''); v.partD = part.replace(/\s*\(([^)]*)\)/, '');
+  VERBS.push(v); V[id] = v;
+});
+const ALL_VERBS = VERBS.map(v => v.id);
+const item = id => W[id] || V[id];
+
+/* ================= Speicher (Gerät + Claude-Konto) ================= */
+const LS_KEY = 'hl2-vokabeltrainer-v1';
+function freshP() { return { v: 1, w: {}, t: {}, xp: 0, st: { n: 0, d: '' }, g: { meteor: 0, memMoves: 0, memTime: 0 }, set: { sound: true, unlockAll: false, pen: true, autoRead: true }, updated: 0 }; }
+function migrate(p) { const f = freshP(); p = p && typeof p === 'object' ? p : {}; return { ...f, ...p, st: { ...f.st, ...(p.st || {}) }, g: { ...f.g, ...(p.g || {}) }, set: { ...f.set, ...(p.set || {}) }, w: p.w || {}, t: p.t || {} }; }
+let P = freshP();
+try { const s = localStorage.getItem(LS_KEY); if (s) P = migrate(JSON.parse(s)); } catch (e) { }
+let saveTimer = null;
+function saveP() {
+  P.updated = Date.now();
+  try { localStorage.setItem(LS_KEY, JSON.stringify(P)); } catch (e) { }
+  clearTimeout(saveTimer); saveTimer = setTimeout(() => Sync.push(), 1500);
+}
+const Sync = {
+  ref: null, busy: false, again: false, state: 'local',
+  async init() {
+    if (!(window.claude && typeof window.claude.use === 'function')) return;
+    try {
+      const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+      if (!db || !user) return;
+      const uid = await user.id();
+      if (!uid) return;
+      this.ref = db.doc('data/users/' + uid + '/progress');
+      const snap = await this.ref.get();
+      let remote = null;
+      if (snap.exists) { const d = snap.data(); try { remote = d && d.json ? JSON.parse(d.json) : null; } catch (e) { } }
+      if (remote && (remote.updated || 0) > (P.updated || 0)) { P = migrate(remote); try { localStorage.setItem(LS_KEY, JSON.stringify(P)); } catch (e) { } refresh(); }
+      else if ((P.updated || 0) > 0) await this.push();
+      this.state = 'cloud'; updateHeader();
+    } catch (e) { this.ref = null; }
+  },
+  async push() {
+    if (!this.ref) return;
+    if (this.busy) { this.again = true; return; }
+    this.busy = true;
+    try { await this.ref.set({ json: JSON.stringify(P), updated: P.updated }); this.state = 'cloud'; }
+    catch (e) { if (e && e.code === 'invalid_argument') { this.ref = null; this.state = 'local'; } }
+    this.busy = false;
+    if (this.again) { this.again = false; this.push(); }
+  }
+};
+const prog = id => P.w[id] || { b: 0, s: 0, c: 0, x: 0 };
+function record(id, score, type) {
+  const p = P.w[id] || (P.w[id] = { b: 0, s: 0, c: 0, x: 0 });
+  p.s++;
+  if (score >= 1) { p.c++; p.b = Math.min(5, (p.b || 0) + 1); }
+  else if (score <= 0) { p.x = (p.x || 0) + 1; p.b = Math.max(0, (p.b || 0) - 2); }
+  p.lt = type;
+  const d = today();
+  if (P.st.d !== d) { const y = new Date(); y.setDate(y.getDate() - 1); const yd = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); P.st.n = P.st.d === yd ? P.st.n + 1 : 1; P.st.d = d; }
+}
+function mastery(ids) { if (!ids.length) return 0; let s = 0; ids.forEach(id => s += Math.min(prog(id).b || 0, 4) / 4); return Math.round(s / ids.length * 100); }
+const level = xp => Math.floor((Math.sqrt(1 + 8 * xp / 100) - 1) / 2) + 1;
+const best = tid => (P.t[tid] || {}).best || 0;
+const starsOf = pct => pct >= 95 ? 3 : pct >= 80 ? 2 : pct >= 60 ? 1 : 0;
+const starsHtml = (n, of = 3) => '<span class="stars">' + Array.from({ length: of }, (_, i) => i < n ? '★' : '<span class="off">★</span>').join('') + '</span>';
+const PASS = 70;
+
+/* ================= Ton & Sprache ================= */
+let AC = null;
+function beep(kind) {
+  if (!P.set.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const seq = kind === 'ok' ? [[660, 0, .09], [990, .09, .14]] : kind === 'win' ? [[523, 0, .1], [659, .1, .1], [784, .2, .1], [1046, .3, .22]] : kind === 'pop' ? [[880, 0, .06]] : [[196, 0, .22]];
+    seq.forEach(([f, t, d]) => { const o = AC.createOscillator(), g = AC.createGain(); o.type = kind === 'bad' ? 'sawtooth' : 'sine'; o.frequency.value = f; g.gain.setValueAtTime(.0001, AC.currentTime + t); g.gain.exponentialRampToValueAtTime(kind === 'bad' ? .08 : .18, AC.currentTime + t + .01); g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + t + d); o.connect(g).connect(AC.destination); o.start(AC.currentTime + t); o.stop(AC.currentTime + t + d + .05); });
+  } catch (e) { }
+}
+const canSpeak = 'speechSynthesis' in window;
+function say(text) {
+  if (!canSpeak) return;
+  try {
+    const t = String(text).replace(/\bsb\./g, 'somebody').replace(/\bsth\./g, 'something').replace(/…/g, '').replace(/\be\.g\./, 'for example').replace(/\betc\./, 'et cetera');
+    const u = new SpeechSynthesisUtterance(t); u.lang = 'en-GB'; u.rate = .9;
+    const vs = speechSynthesis.getVoices(); const v = vs.find(x => /en[-_]GB/i.test(x.lang)) || vs.find(x => /^en/i.test(x.lang)); if (v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch (e) { }
+}
+const sayBtn = t => canSpeak ? `<button class="say" data-say="${esc(t)}" title="Vorlesen">🔊</button>` : '';
+document.addEventListener('click', e => { const b = e.target.closest('[data-say]'); if (b) { e.stopPropagation(); say(b.dataset.say); } }, true);
+
+/* ================= UI-Grundgerüst ================= */
+const S = { tab: 'path', open: {} };
+let toastT = null;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
+function updateHeader() {
+  $('#xpChip').textContent = '⭐ ' + P.xp + ' · Lv ' + level(P.xp);
+  $('#streakChip').textContent = '🔥 ' + (P.st.d === today() || isYesterday(P.st.d) ? P.st.n : 0);
+}
+function isYesterday(d) { const y = new Date(); y.setDate(y.getDate() - 1); return d === y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate(); }
+function setTab(t) { S.tab = t; $$('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); render(); window.scrollTo(0, 0); }
+function render() {
+  updateHeader();
+  const v = $('#view');
+  if (S.tab === 'path') v.innerHTML = viewPath();
+  else if (S.tab === 'tests') v.innerHTML = viewTests();
+  else if (S.tab === 'learn') v.innerHTML = viewLearn();
+  else if (S.tab === 'games') v.innerHTML = viewGames();
+  if (S.tab === 'path') { const c = $('.node.current'); if (c && S.scrollCur) { S.scrollCur = false; if (+c.dataset.i > 0) c.scrollIntoView({ block: 'center' }); } }
+}
+function refresh() { if (!$('#overlay').classList.contains('on')) render(); else updateHeader(); }
+function openOverlay(html) { const o = $('#overlay'); o.innerHTML = html; o.classList.add('on'); o.scrollTop = 0; document.body.style.overflow = 'hidden'; }
+function closeOverlay() { try { const q = Quiz.cur && Quiz.cur.q; if (q && q.penCtl) q.penCtl.abort(); } catch (e) { } Quiz.pad = null; const o = $('#overlay'); o.classList.remove('on'); o.innerHTML = ''; document.body.style.overflow = ''; hideFb(); Game.stop(); Quiz.cur = null; Cards.cur = null; render(); }
+function openSheet(html) { const s = $('#sheet'); s.innerHTML = `<div class="dim" data-act="closeSheet"></div><div class="panel"><div class="wrap">${html}</div></div>`; s.classList.add('on'); }
+function closeSheet() { const s = $('#sheet'); s.classList.remove('on'); s.innerHTML = ''; }
+function confirmSheet(title, text, yes, fn) { S.confirmFn = fn; openSheet(`<div class="sheet-h"><h3>${esc(title)}</h3></div><p class="muted" style="font-weight:700">${esc(text)}</p><div class="actions"><button class="btn sec" data-act="closeSheet">Abbrechen</button><button class="btn" data-act="confirmYes">${esc(yes)}</button></div>`); }
+function confetti() { const cols = ['#d9161d', '#ffc400', '#1f9d55', '#2563c9', '#8a4fd8']; for (let i = 0; i < 40; i++) { const c = document.createElement('div'); c.className = 'confetti'; c.style.left = Math.random() * 100 + 'vw'; c.style.background = pick(cols); c.style.animationDuration = (1.4 + Math.random() * 1.4) + 's'; c.style.animationDelay = Math.random() * .3 + 's'; document.body.appendChild(c); setTimeout(() => c.remove(), 3200); } }
+
+/* ================= Lernpfad ================= */
+function pathNodes() { const n = []; UNITS.forEach(u => { u.secs.forEach(sid => n.push({ k: 'sec', id: sid, unit: u.id, test: 'sec:' + sid })); n.push({ k: 'unit', id: u.id, unit: u.id, test: 'unit:' + u.id }); }); return n; }
+function nodeInfo(nodes, i) { const n = nodes[i]; const b = best(n.test); return { b, passed: b >= PASS, unlocked: P.set.unlockAll || i === 0 || best(nodes[i - 1].test) >= PASS }; }
+function idsOfNode(n) { return n.k === 'sec' ? SECS[n.id].words : n.k === 'unit' ? UNITS.find(u => u.id === n.id).words : ALL_VERBS; }
+function viewPath() {
+  const nodes = pathNodes();
+  const known = ALL_WORDS.filter(id => (prog(id).b || 0) >= 3).length;
+  const pct = Math.round(known / ALL_WORDS.length * 100);
+  const passed = nodes.filter(n => best(n.test) >= PASS).length;
+  let curIdx = nodes.findIndex((n, i) => nodeInfo(nodes, i).unlocked && !nodeInfo(nodes, i).passed);
+  let h = `<div class="card hero"><div class="ring" style="--p:${pct}"><div>${pct}%</div></div><div><h3>Dein Fortschritt</h3><div class="muted" style="font-weight:700">${known} von ${ALL_WORDS.length} Wörtern sitzen sicher</div>
+  <div class="stat-row"><span class="pill">✅ ${passed}/${nodes.length} Stationen</span><span class="pill">🏆 ${UNITS.filter(u => best('unit:' + u.id) >= PASS).length}/6 Unit-Tests</span></div></div></div>`;
+  const prob = problemWords();
+  h += `<div class="grid2" style="margin-top:10px">
+    <button class="item" data-act="verbsSheet"><div class="ico" style="background:#6b4bd1">🔁</div><div class="grow"><b>Verben</b><small>${mastery(ALL_VERBS)}% · jederzeit</small></div></button>
+    <button class="item" data-act="practiceProblems" ${prob.length ? '' : 'disabled style="opacity:.55"'}><div class="ico" style="background:#e98a00">🩹</div><div class="grow"><b>Fehler</b><small>${prob.length} Problemwörter</small></div></button></div>`;
+  let i = 0;
+  UNITS.forEach(u => {
+    const m = mastery(u.words);
+    h += `<div class="unit-banner" style="background:${u.col}"><div class="grow"><div class="num">${u.title}</div><h3>${esc(u.name)}</h3><div class="bar"><i style="width:${m}%"></i></div></div><div style="font-weight:900;font-size:20px">${m}%</div></div><div class="path">`;
+    let k = 0;
+    while (i < nodes.length && nodes[i].unit === u.id) {
+      const n = nodes[i], info = nodeInfo(nodes, i);
+      const ids = idsOfNode(n); const mm = mastery(ids);
+      const side = n.k === 'unit' ? '' : (['', 'l', '', 'r'][k % 4]);
+      const cls = ['node', side, info.unlocked ? '' : 'locked', info.passed ? 'passed' : '', i === curIdx ? 'current' : '', n.k === 'unit' ? 'boss' : ''].join(' ');
+      const icon = !info.unlocked ? '🔒' : n.k === 'unit' ? '🏆' : info.passed ? '✓' : (k + 1);
+      const label = n.k === 'unit' ? 'Großer Unit-Test' : SECS[n.id].t;
+      h += `<button class="${cls}" data-act="node" data-i="${i}">${i === curIdx ? '<span class="go">Weiter hier</span>' : ''}<div class="disc" style="--p:${mm};--c:${u.col}"><div>${icon}</div></div><div class="lbl">${esc(label)}</div><div class="sub">${info.b ? starsHtml(starsOf(info.b)) + ' ' + info.b + '%' : ids.length + ' Wörter'}</div></button>`;
+      i++; k++;
+    }
+    h += `</div>`;
+  });
+  h += `<p class="muted" style="text-align:center;font-weight:700;font-size:14px;margin-top:24px">Ab ${PASS} % im Test wird die nächste Station frei.<br>Im Tab „Tests“ ist alles sofort offen.</p>`;
+  return `<div class="wrap">${h}</div>`;
+}
+function nodeSheet(i) {
+  const nodes = pathNodes(), n = nodes[i], info = nodeInfo(nodes, i), u = UNITS.find(x => x.id === n.unit);
+  if (!info.unlocked) { toast(`🔒 Erst die Station davor mit ${PASS} % bestehen`); return; }
+  const ids = idsOfNode(n);
+  const title = n.k === 'unit' ? `${u.title} · Großer Test` : `${u.title} · ${SECS[n.id].t}`;
+  const scope = n.k === 'unit' ? 'unit:' + n.id : 'sec:' + n.id;
+  openSheet(`<div class="sheet-h"><div class="ico" style="background:${u.col};width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:22px">${n.k === 'unit' ? '🏆' : '📘'}</div><div class="grow"><h3>${esc(title)}</h3><div class="muted" style="font-weight:700">${ids.length} Wörter · ${mastery(ids)}% gelernt${info.b ? ' · Bestwert ' + info.b + '%' : ''}</div></div></div>
+  <div class="bar green" style="margin-bottom:14px"><i style="width:${mastery(ids)}%"></i></div>
+  <div class="list">
+   <button class="item" data-act="cards" data-scope="${scope}"><div class="ico" style="background:#2563c9">🃏</div><div class="grow"><b>Lernen</b><small>Karteikarten, ohne Bewertung</small></div></button>
+   <button class="item" data-act="practice" data-scope="${scope}"><div class="ico" style="background:#1f9d55">🎯</div><div class="grow"><b>Üben</b><small>Wörter kommen wieder, bis sie sitzen</small></div></button>
+   <button class="item" data-act="testStart" data-test="${n.test}"><div class="ico" style="background:${u.col}">📝</div><div class="grow"><b>${n.k === 'unit' ? 'Großer Unit-Test' : 'Test'}</b><small>${ids.length} Fragen · ab ${PASS} % bestanden</small></div><div class="right">${starsHtml(starsOf(info.b))}</div></button>
+   <button class="item" data-act="list" data-scope="${scope}"><div class="ico" style="background:#7c6f72">📋</div><div class="grow"><b>Wortliste</b><small>Alle Wörter auf einen Blick</small></div></button>
+  </div>`);
+}
+function verbsSheet() {
+  openSheet(`<div class="sheet-h"><div class="ico" style="background:#6b4bd1;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:22px">🔁</div><div class="grow"><h3>Unregelmäßige Verben</h3><div class="muted" style="font-weight:700">${VERBS.length} Verben · ${mastery(ALL_VERBS)}% gelernt${best('verbs') ? ' · Bestwert ' + best('verbs') + '%' : ''}</div></div></div>
+  <div class="list">
+   <button class="item" data-act="cards" data-scope="verbs"><div class="ico" style="background:#2563c9">🃏</div><div class="grow"><b>Lernen</b><small>go – went – gone als Karteikarten</small></div></button>
+   <button class="item" data-act="practice" data-scope="verbs"><div class="ico" style="background:#1f9d55">🎯</div><div class="grow"><b>Üben</b><small>20 Verben, bis sie sitzen</small></div></button>
+   <button class="item" data-act="testStart" data-test="verbs"><div class="ico" style="background:#6b4bd1">📝</div><div class="grow"><b>Verben-Test</b><small>Formen schreiben und auswählen</small></div><div class="right">${starsHtml(starsOf(best('verbs')))}</div></button>
+   <button class="item" data-act="list" data-scope="verbs"><div class="ico" style="background:#7c6f72">📋</div><div class="grow"><b>Verbenliste</b><small>Alle Formen auf einen Blick</small></div></button>
+  </div>`);
+}
+function problemWords() { return [...ALL_WORDS, ...ALL_VERBS].filter(id => { const p = P.w[id]; return p && (p.x || 0) > 0 && (p.b || 0) < 2; }); }
+
+/* ================= Tests-Tab ================= */
+function testIds(tid) {
+  if (tid === 'verbs') return ALL_VERBS;
+  if (tid === 'mix') return ALL_WORDS;
+  const [k, id] = tid.split(':');
+  return k === 'unit' ? UNITS.find(u => u.id === id).words : SECS[id].words;
+}
+function testTitle(tid) {
+  if (tid === 'verbs') return 'Unregelmäßige Verben';
+  if (tid === 'mix') return 'Gesamt-Mix';
+  const [k, id] = tid.split(':');
+  if (k === 'unit') { const u = UNITS.find(x => x.id === id); return `${u.title}: ${u.name}`; }
+  const s = SECS[id], u = UNITS.find(x => x.id === s.unit); return `${u.title} · ${s.t}`;
+}
+function viewTests() {
+  let h = `<h2 class="sec-title">Große Unit-Tests</h2><div class="list">`;
+  UNITS.forEach(u => { const b = best('unit:' + u.id); h += `<button class="item" data-act="testStart" data-test="unit:${u.id}"><div class="ico" style="background:${u.col}">${u.id.slice(1)}</div><div class="grow"><b>${u.title}: ${esc(u.name)}</b><small>${u.words.length} Wörter · alle Abschnitte</small></div><div class="right">${starsHtml(starsOf(b))}<small class="muted" style="display:block;font-weight:800">${b ? b + '%' : '–'}</small></div></button>`; });
+  h += `</div><h2 class="sec-title">Spezial</h2><div class="list">
+   <button class="item" data-act="testStart" data-test="verbs"><div class="ico" style="background:#6b4bd1">🔁</div><div class="grow"><b>Unregelmäßige Verben</b><small>${VERBS.length} Verben · Formen schreiben und wählen</small></div><div class="right">${starsHtml(starsOf(best('verbs')))}<small class="muted" style="display:block;font-weight:800">${best('verbs') ? best('verbs') + '%' : '–'}</small></div></button>
+   <button class="item" data-act="testStart" data-test="mix"><div class="ico" style="background:#2b2224">🎲</div><div class="grow"><b>Gesamt-Mix</b><small>Zufällige Wörter aus allen Units</small></div><div class="right">${starsHtml(starsOf(best('mix')))}<small class="muted" style="display:block;font-weight:800">${best('mix') ? best('mix') + '%' : '–'}</small></div></button>
+  </div><h2 class="sec-title">Tests von Überschrift zu Überschrift</h2><div class="list">`;
+  UNITS.forEach(u => {
+    const open = S.open['t' + u.id];
+    h += `<div class="acc ${open ? 'open' : ''}"><button class="head" data-act="acc" data-k="t${u.id}"><div class="ico" style="background:${u.col};width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:900">${u.id.slice(1)}</div><div class="grow"><b>${u.title}: ${esc(u.name)}</b><small class="muted" style="display:block;font-weight:700">${u.secs.length} Abschnitte</small></div><span class="chev">›</span></button><div class="body">`;
+    u.secs.forEach(sid => { const s = SECS[sid], b = best('sec:' + sid); h += `<div class="srow"><div class="grow"><b>${esc(s.t)}</b><div class="muted" style="font-size:13px;font-weight:700">${s.words.length} Wörter · ${mastery(s.words)}% gelernt</div></div>${starsHtml(starsOf(b))}<button class="btn small" data-act="testStart" data-test="sec:${sid}">Test</button></div>`; });
+    h += `</div></div>`;
+  });
+  h += `</div>`;
+  return `<div class="wrap">${h}</div>`;
+}
+function testStartSheet(tid) {
+  const ids = testIds(tid); const big = ids.length > 30;
+  S.tcfg = { tid, n: tid === 'mix' ? 30 : (tid === 'verbs' ? 25 : ids.length), order: 'mix' };
+  const nOpts = tid === 'mix' ? [20, 30, 50] : tid === 'verbs' ? [15, 25, ids.length] : big ? [20, 40, ids.length] : [ids.length];
+  openSheet(`<div class="sheet-h"><h3>📝 ${esc(testTitle(tid))}</h3></div>
+   <p class="muted" style="font-weight:700;margin-top:0">Gemischte Fragen: mal Deutsch, mal Englisch, mal schreiben, mal auswählen. Ab ${PASS} % bestanden.${best(tid) ? ' Dein Bestwert: ' + best(tid) + '%.' : ''}</p>
+   ${nOpts.length > 1 ? `<b>Wie viele Fragen?</b><div class="optrow" data-grp="n">${nOpts.map(n => `<button class="${n === S.tcfg.n ? 'on' : ''}" data-act="tcfg" data-k="n" data-v="${n}">${n === ids.length ? 'Alle (' + n + ')' : n}</button>`).join('')}</div>` : ''}
+   ${tid !== 'mix' && tid !== 'verbs' ? `<b>Reihenfolge</b><div class="optrow" data-grp="order"><button class="on" data-act="tcfg" data-k="order" data-v="mix">Gemischt</button><button data-act="tcfg" data-k="order" data-v="book">Wie im Buch</button></div>` : ''}
+   <button class="btn block" data-act="testGo">Test starten</button>`);
+}
+
+/* ================= Lernen-Tab ================= */
+function viewLearn() {
+  let h = `<h2 class="sec-title">Lernmodus – ohne Noten</h2><p class="muted" style="font-weight:700;margin:-4px 4px 12px">Karteikarten umdrehen und Wortlisten ansehen. Hier wird nichts bewertet.</p><div class="list">`;
+  h += `<div class="acc ${S.open.lverbs ? 'open' : ''}"><button class="head" data-act="acc" data-k="lverbs"><div class="ico" style="background:#6b4bd1;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff">🔁</div><div class="grow"><b>Unregelmäßige Verben</b><small class="muted" style="display:block;font-weight:700">${VERBS.length} Verben</small></div><span class="chev">›</span></button><div class="body"><div class="srow"><div class="grow"><b>Alle Verben</b></div><div class="mini"><button data-act="cards" data-scope="verbs">🃏 Karten</button><button data-act="list" data-scope="verbs">📋 Liste</button></div></div></div></div>`;
+  UNITS.forEach(u => {
+    const open = S.open['l' + u.id];
+    h += `<div class="acc ${open ? 'open' : ''}"><button class="head" data-act="acc" data-k="l${u.id}"><div class="ico" style="background:${u.col};width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:900">${u.id.slice(1)}</div><div class="grow"><b>${u.title}: ${esc(u.name)}</b><small class="muted" style="display:block;font-weight:700">${u.words.length} Wörter · ${mastery(u.words)}% gelernt</small></div><span class="chev">›</span></button><div class="body">
+     <div class="srow"><div class="grow"><b>Ganze Unit</b></div><div class="mini"><button data-act="cards" data-scope="unit:${u.id}">🃏 Karten</button><button data-act="list" data-scope="unit:${u.id}">📋 Liste</button></div></div>`;
+    u.secs.forEach(sid => { const s = SECS[sid]; h += `<div class="srow"><div class="grow"><b>${esc(s.t)}</b><div class="muted" style="font-size:13px;font-weight:700">${s.words.length} Wörter</div></div><div class="mini"><button data-act="cards" data-scope="sec:${sid}">🃏</button><button data-act="list" data-scope="sec:${sid}">📋</button><button data-act="practice" data-scope="sec:${sid}">🎯</button></div></div>`; });
+    h += `</div></div>`;
+  });
+  h += `</div>`;
+  return `<div class="wrap">${h}</div>`;
+}
+function scopeIds(scope) {
+  if (scope === 'verbs') return ALL_VERBS;
+  if (scope === 'all') return ALL_WORDS;
+  const [k, id] = scope.split(':');
+  return k === 'unit' ? UNITS.find(u => u.id === id).words : SECS[id].words;
+}
+function scopeTitle(scope) {
+  if (scope === 'verbs') return 'Unregelmäßige Verben';
+  if (scope === 'all') return 'Alle Units';
+  if (scope === 'problems') return 'Problemwörter';
+  return testTitle(scope);
+}
+
+/* ================= Karteikarten ================= */
+const Cards = {
+  cur: null,
+  start(scope) {
+    const ids = scopeIds(scope);
+    this.cur = { scope, ids, queue: ids.slice(), i: 0, dir: this.cur ? this.cur.dir : 'en', known: 0, again: 0, flipped: false, total: ids.length };
+    closeSheet(); this.render();
+  },
+  face(id, side) {
+    const x = item(id);
+    if (x.isVerb) {
+      if (side === 'en') return `<div class="qflag en">EN</div><div class="w" style="margin-top:10px">${esc(x.inf)} ${sayBtn(x.inf + ', ' + x.pastD + ', ' + x.partD)}</div><div class="qhint" style="margin-top:6px">Wie heißen die Formen?</div>`;
+      return `<div class="qflag de">Formen</div><div class="w" style="margin-top:10px;font-size:clamp(22px,6vw,32px)">${esc(x.inf)} – ${esc(x.past)} – ${esc(x.part)}</div><div class="qhint" style="margin-top:8px;font-size:17px;color:var(--ink)">${esc(x.de)}</div>`;
+    }
+    if (side === 'en') return `<div class="qflag en">Englisch</div><div class="w" style="margin-top:10px">${esc(x.en)} ${sayBtn(x.en)}</div>${x.h ? `<div class="qhint" style="margin-top:6px">${esc(x.h)}</div>` : ''}`;
+    return `<div class="qflag de">Deutsch</div><div class="w" style="margin-top:10px">${esc(x.de)}</div>`;
+  },
+  render() {
+    const c = this.cur;
+    if (!c.queue.length) return this.done();
+    const id = c.queue[0];
+    const isV = item(id).isVerb;
+    const front = isV ? 'en' : c.dir, back = isV ? 'de' : (c.dir === 'en' ? 'de' : 'en');
+    const doneN = c.total - c.queue.length;
+    openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><div class="bar green"><i style="width:${doneN / c.total * 100}%"></i></div><span class="count">${doneN + 1}/${c.total}</span></div></div>
+    <div class="wrap">
+     <div class="row" style="justify-content:space-between;margin-top:4px"><b class="muted" style="font-size:14px">🃏 ${esc(scopeTitle(c.scope))}</b>${isV ? '' : `<div class="seg"><button class="${c.dir === 'en' ? 'on' : ''}" data-act="cardDir" data-v="en">EN → DE</button><button class="${c.dir === 'de' ? 'on' : ''}" data-act="cardDir" data-v="de">DE → EN</button></div>`}</div>
+     <div class="fc-wrap"><div class="fc ${c.flipped ? 'flip' : ''}" data-act="flip"><div class="face front">${this.face(id, front)}<div class="tap">Tippen zum Umdrehen</div></div><div class="face back">${this.face(id, back)}${!isV && back === 'en' ? '' : ''}</div></div></div>
+     <div class="actions"><button class="btn sec" data-act="cardAgain">↻ Nochmal</button><button class="btn green" data-act="cardKnow">✓ Kann ich</button></div>
+     <button class="skip" data-act="cardShuffle">Karten mischen</button>
+    </div>`);
+  },
+  flip() { this.cur.flipped = !this.cur.flipped; $('.fc') && $('.fc').classList.toggle('flip', this.cur.flipped); },
+  next(know) {
+    const c = this.cur; const id = c.queue.shift();
+    if (know) c.known++; else { c.again++; c.queue.splice(Math.min(c.queue.length, 3 + rnd(3)), 0, id); c.total++; }
+    c.flipped = false; beep(know ? 'pop' : 'pop'); this.render();
+  },
+  done() {
+    const c = this.cur; beep('win');
+    const isPracticeable = true;
+    openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><div class="grow"></div></div></div><div class="wrap result"><div class="big-emoji">🎉</div><h2>Alle Karten durch!</h2><p class="muted" style="font-weight:700">${c.ids.length} Karten · ${c.again}× nochmal angesehen</p>
+     <div class="list" style="margin-top:18px">${isPracticeable ? `<button class="btn green block" data-act="practice" data-scope="${c.scope}">🎯 Jetzt üben</button>` : ''}<button class="btn sec block" data-act="cards" data-scope="${c.scope}">🃏 Nochmal lernen</button><button class="btn sec block" data-act="close">Fertig</button></div></div>`);
+  }
+};
+
+/* ================= Wortliste ================= */
+function openList(scope) {
+  closeSheet();
+  const ids = scopeIds(scope);
+  let body = '';
+  if (scope === 'verbs') {
+    body = ids.map(id => { const v = V[id]; return `<div class="wl-row" data-f="${esc((v.inf + ' ' + v.past + ' ' + v.part + ' ' + v.de).toLowerCase())}"><span class="dot b${Math.min(prog(id).b || 0, 5)}"></span><div class="grow"><div class="en">${esc(v.inf)} – ${esc(v.past)} – ${esc(v.part)}</div><small>${esc(v.de)}</small></div>${sayBtn(v.inf + ', ' + v.pastD + ', ' + v.partD)}</div>`; }).join('');
+  } else {
+    let lastSec = null;
+    ids.forEach(id => { const w = W[id]; if (w.sec !== lastSec && !scope.startsWith('sec:')) { body += `<div class="wl-sec">${esc(SECS[w.sec].t)}</div>`; } lastSec = w.sec;
+      body += `<div class="wl-row" data-f="${esc((w.en + ' ' + w.de).toLowerCase())}"><span class="dot b${Math.min(prog(id).b || 0, 5)}"></span><div class="grow"><div class="en">${esc(w.en)}</div><small>${esc(w.de)}${w.h ? ' · <i>' + esc(w.h) + '</i>' : ''}</small></div>${sayBtn(w.en)}</div>`; });
+  }
+  openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><input class="inp" id="wlSearch" placeholder="Suchen …" style="padding:10px 14px;font-size:16px" autocomplete="off"></div></div>
+   <div class="wrap"><div class="row" style="justify-content:space-between;margin:4px 4px 10px"><b>${esc(scopeTitle(scope))}</b><span class="muted" style="font-weight:800;font-size:13px">${ids.length} Einträge</span></div>
+   <div class="muted" style="font-size:12px;font-weight:700;margin:0 4px 10px">Punkt-Farbe: grau = neu · rot = schwierig · gelb = wird besser · grün = sitzt</div>
+   <div id="wl">${body}</div><div class="actions" style="margin-bottom:30px"><button class="btn sec" data-act="cards" data-scope="${scope}">🃏 Karten</button><button class="btn green" data-act="practice" data-scope="${scope}">🎯 Üben</button></div></div>`);
+  $('#wlSearch').addEventListener('input', e => { const q = e.target.value.toLowerCase().trim(); $$('#wl .wl-row').forEach(r => r.style.display = !q || r.dataset.f.includes(q) ? '' : 'none'); $$('#wl .wl-sec').forEach(s => s.style.display = q ? 'none' : ''); });
+}
+
+/* ================= Fragen bauen ================= */
+const TYPES = {
+  mc_en_de: { dir: 'en2de', label: 'Was heißt das auf Deutsch?' },
+  mc_de_en: { dir: 'de2en', label: 'Was heißt das auf Englisch?' },
+  type_de_en: { dir: 'de2en', label: 'Schreib das englische Wort' },
+  type_en_de: { dir: 'en2de', label: 'Schreib die deutsche Bedeutung' },
+  scramble: { dir: 'de2en', label: 'Bau das englische Wort zusammen' },
+  tf: { dir: 'any', label: 'Stimmt das?' },
+  v_both: { dir: 'v', label: 'Schreib beide Vergangenheitsformen' },
+  v_past: { dir: 'v', label: 'Schreib das simple past' },
+  v_part: { dir: 'v', label: 'Schreib das past participle (3. Form)' },
+  v_gap: { dir: 'v', label: 'Welche Form fehlt?' },
+  v_inf: { dir: 'v', label: 'Wie heißt das Verb auf Englisch?' },
+  v_mc_de: { dir: 'v', label: 'Was bedeutet das Verb?' },
+  pen: { dir: 'de2en', label: 'Schreib das englische Wort ✍️' },
+  pen_de: { dir: 'en2de', label: 'Schreib die deutsche Bedeutung ✍️' },
+  v_pen: { dir: 'v', label: 'Schreib die Form ✍️' }
+};
+const penDevice = () => { try { return Pad.penSeen || matchMedia('(any-pointer: coarse)').matches; } catch (e) { return false; } };
+function allowedTypes(x) {
+  if (x.isVerb) { const t = ['v_both', 'v_past', 'v_part', 'v_gap', 'v_inf', 'v_mc_de']; if (P.set.pen && !/\s/.test(x.pastD + x.partD)) t.push('v_pen'); return t; }
+  const t = ['mc_en_de', 'mc_de_en', 'tf'];
+  if (x.canEn) t.push('type_de_en'); if (x.canDe) t.push('type_en_de'); if (x.scr) t.push('scramble');
+  if (P.set.pen && x.canEn && x.enP.length <= 22) t.push('pen');
+  if (P.set.pen && x.canDe && x.deN.some(k => k.length <= 16)) t.push('pen_de');
+  return t;
+}
+function chooseType(x, ctx, mode) {
+  const p = prog(x.id), b = p.b || 0;
+  let base;
+  if (x.isVerb) base = { v_both: 3, v_past: 2, v_part: 2, v_gap: 1.6, v_inf: 1.4, v_mc_de: .8, v_pen: 1.8 };
+  else if (mode === 'test') base = { mc_en_de: 1.3, mc_de_en: 1.3, type_de_en: 2.1, type_en_de: 1.4, scramble: 1.1, tf: .7, pen: 1.8, pen_de: .7 };
+  else if (b <= 1) base = { mc_en_de: 2.2, mc_de_en: 2.2, type_de_en: 1.2, type_en_de: .8, scramble: 1.8, tf: 1.3, pen: 1, pen_de: .4 };
+  else base = { mc_en_de: 1, mc_de_en: 1, type_de_en: 2.4, type_en_de: 1.8, scramble: 1.3, tf: .5, pen: 2.2, pen_de: .9 };
+  const types = allowedTypes(x);
+  const penF = penDevice() ? 1 : .35;
+  const ws = types.map(t => {
+    let w = base[t] || 1;
+    if (t === 'pen' || t === 'pen_de' || t === 'v_pen') w *= penF;
+    if (t === ctx.lastType) w *= .12;
+    if (t === ctx.prevType) w *= .5;
+    if (t === p.lt) w *= .35;
+    const d = TYPES[t].dir;
+    if (ctx.lastDir && (d === 'en2de' || d === 'de2en')) w *= d === ctx.lastDir ? .55 : 1.9;
+    return w;
+  });
+  return wpick(types, ws);
+}
+function distractors(w, field, n) {
+  const bad = new Set(field === 'de' ? acceptDe(w) : acceptEn(w));
+  const out = [];
+  const pools = [shuffle(SECS[w.sec].words), shuffle(UNITS.find(u => u.id === w.unit).words), shuffle(ALL_WORDS)];
+  for (const pool of pools) {
+    for (const id of pool) {
+      if (out.length >= n) return out;
+      const o = W[id]; if (o.id === w.id || o.en === w.en) continue;
+      const keys = field === 'de' ? o.deN : o.enN; if (keys.some(k => bad.has(k))) continue;
+      const disp = o[field]; if (disp === w[field] || out.includes(disp)) continue;
+      if (pool === pools[0] && out.length >= 2) break;
+      out.push(disp);
+    }
+  }
+  return out;
+}
+function regular(inf) { if (/e$/.test(inf)) return inf + 'd'; if (/[^aeiou]y$/.test(inf)) return inf.slice(0, -1) + 'ied'; return inf + 'ed'; }
+function verbDistractors(v, slot) {
+  const correct = slot === 'past' ? v.pastD : v.partD;
+  const cand = shuffle(uniq([v.inf, v.pastD, v.partD, regular(v.inf), v.inf + 's', slot === 'past' ? pick(VERBS).pastD : pick(VERBS).partD, pick(VERBS).pastD]));
+  const cn = norm(correct);
+  return cand.filter(c => norm(c) !== cn && !(slot === 'past' ? v.pastN : v.partN).includes(norm(c))).slice(0, 3);
+}
+function buildQ(id, type) {
+  const x = item(id); const q = { id, type, x };
+  if (x.isVerb) {
+    const v = x;
+    if (type === 'v_both') { q.fields = [{ k: 'past', label: 'simple past', acc: v.pastN, show: v.past }, { k: 'part', label: 'past participle', acc: v.partN, show: v.part }]; q.prompt = v.inf; q.sub = v.de; }
+    else if (type === 'v_past') { q.fields = [{ k: 'past', label: 'simple past', acc: v.pastN, show: v.past }]; q.prompt = v.inf; q.sub = v.de; }
+    else if (type === 'v_part') { q.fields = [{ k: 'part', label: 'past participle', acc: v.partN, show: v.part }]; q.prompt = `${v.inf} – ${v.pastD} – ___`; q.sub = v.de; }
+    else if (type === 'v_inf') { q.fields = [{ k: 'inf', label: 'Grundform (infinitive)', acc: v.infN, show: v.inf }]; q.prompt = v.de; q.promptLang = 'de'; q.sub = 'simple past: ' + v.pastD.replace(/./g, (c, i) => i === 0 ? c : (c === ' ' || c === '/' ? c : '·')); }
+    else if (type === 'v_gap') { q.slot = Math.random() < .5 ? 'past' : 'part'; const correct = q.slot === 'past' ? v.pastD : v.partD; q.prompt = q.slot === 'past' ? `${v.inf} – ___ – ${v.partD}` : `${v.inf} – ${v.pastD} – ___`; q.sub = v.de; q.opts = shuffle([correct, ...verbDistractors(v, q.slot)]); q.ans = correct; }
+    else if (type === 'v_pen') { const past = Math.random() < .5; q.label = past ? 'Schreib das simple past ✍️' : 'Schreib das past participle ✍️'; q.prompt = past ? v.inf : `${v.inf} – ${v.pastD} – ___`; q.sub = v.de; q.pen = { lang: 'en', acc: past ? v.pastN : v.partN, sol: past ? v.past : v.part, other: uniq([...v.infN, ...v.pastN, ...v.partN]).filter(a => !(past ? v.pastN : v.partN).includes(a)) }; }
+    else if (type === 'v_mc_de') { q.prompt = `${v.inf} – ${v.pastD} – ${v.partD}`; const others = shuffle(VERBS.filter(o => o.id !== v.id && !o.deN.some(k => v.deN.includes(k)))).slice(0, 3).map(o => o.de); q.opts = shuffle([v.de, ...others]); q.ans = v.de; }
+    if (!q.promptLang) q.promptLang = 'en';
+    return q;
+  }
+  const w = x;
+  if (type === 'mc_en_de') { q.prompt = w.en; q.promptLang = 'en'; q.opts = shuffle([w.de, ...distractors(w, 'de', 3)]); q.ans = w.de; }
+  else if (type === 'mc_de_en') { q.prompt = w.de; q.promptLang = 'de'; q.opts = shuffle([w.en, ...distractors(w, 'en', 3)]); q.ans = w.en; }
+  else if (type === 'type_de_en') { q.prompt = w.de; q.promptLang = 'de'; q.fields = [{ k: 'en', acc: acceptEn(w), show: w.en }]; }
+  else if (type === 'type_en_de') { q.prompt = w.en; q.promptLang = 'en'; q.fields = [{ k: 'de', acc: acceptDe(w), show: w.de, de: true }]; }
+  else if (type === 'scramble') {
+    q.prompt = w.de; q.promptLang = 'de'; q.mode = w.scr; q.target = w.enP;
+    const parts = w.scr === 'letters' ? w.enP.split('') : w.enP.split(/\s+/);
+    let t = shuffle(parts), tries = 0; while (t.join('|') === parts.join('|') && tries++ < 10) t = shuffle(parts);
+    q.tiles = t.map((s, i) => ({ s, i, used: false })); q.built = [];
+  }
+  else if (type === 'pen') { q.prompt = w.de; q.promptLang = 'de'; q.pen = { lang: 'en', acc: acceptEn(w), sol: w.en }; }
+  else if (type === 'pen_de') { q.prompt = w.en; q.promptLang = 'en'; q.pen = { lang: 'de', acc: acceptDe(w), sol: w.de }; }
+  else if (type === 'tf') { q.prompt = w.en; q.promptLang = 'en'; const truth = Math.random() < .5; const wrong = distractors(w, 'de', 1)[0]; q.truth = truth || !wrong; q.shown = q.truth ? w.de : wrong; }
+  return q;
+}
+function grade(input, acc, verb) {
+  const n = norm(input);
+  if (!n) return { s: 0, empty: true };
+  if (acc.includes(n)) return { s: 1 };
+  if (verb && verb.all.includes(n)) return { s: 0, other: true };
+  const minLen = verb ? 6 : 4;
+  for (const a of acc) { if (a.length >= minLen && lev(n, a) <= (a.length >= 9 ? 2 : 1)) return { s: .5 }; }
+  return { s: 0 };
+}
+
+/* ================= Schreibfeld (Stift) ================= */
+const Pad = { penSeen: false };
+function makePad(el) {
+  if (!el) return null;
+  const cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), ph = el.querySelector('.pad-ph');
+  const pad = { strokes: [], cur: null, pid: null, locked: false };
+  const INK = '#1b2a6b';
+  const width = p => 2.2 + (p == null ? .5 : p) * 2.6;
+  function resize() { const r = cv.getBoundingClientRect(); const d = window.devicePixelRatio || 1; cv.width = Math.max(1, Math.round(r.width * d)); cv.height = Math.max(1, Math.round(r.height * d)); ctx.setTransform(d, 0, 0, d, 0, 0); redraw(); }
+  function pos(e) { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top, p: e.pointerType === 'pen' ? (e.pressure || .5) : .5 }; }
+  function dot(c, a) { c.fillStyle = INK; c.beginPath(); c.arc(a.x, a.y, width(a.p) / 2, 0, Math.PI * 2); c.fill(); }
+  function seg(c, a, b) { c.strokeStyle = INK; c.lineCap = 'round'; c.lineJoin = 'round'; c.lineWidth = width((a.p + b.p) / 2); c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); }
+  function drawAll(c) { pad.strokes.forEach(st => { dot(c, st[0]); for (let i = 1; i < st.length; i++) seg(c, st[i - 1], st[i]); }); }
+  function redraw() { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.restore(); drawAll(ctx); if (ph) ph.style.display = pad.strokes.length ? 'none' : ''; }
+  cv.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'pen') Pad.penSeen = true;
+    else if (e.pointerType === 'touch' && Pad.penSeen) return; // Handballen ignorieren, wenn ein Stift benutzt wird
+    if (pad.locked || pad.cur) return;
+    e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (x) { }
+    pad.pid = e.pointerId; pad.cur = [pos(e)]; pad.strokes.push(pad.cur); dot(ctx, pad.cur[0]); if (ph) ph.style.display = 'none';
+  });
+  cv.addEventListener('pointermove', e => {
+    if (!pad.cur || e.pointerId !== pad.pid) return; e.preventDefault();
+    const evs = (e.getCoalescedEvents && e.getCoalescedEvents()) || []; (evs.length ? evs : [e]).forEach(ev => { const p = pos(ev), last = pad.cur[pad.cur.length - 1]; if (Math.hypot(p.x - last.x, p.y - last.y) < .7) return; pad.cur.push(p); seg(ctx, last, p); });
+  });
+  const end = e => { if (e.pointerId === pad.pid) { pad.cur = null; pad.pid = null; } };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end); cv.addEventListener('lostpointercapture', end);
+  ['touchstart', 'touchmove'].forEach(t => cv.addEventListener(t, e => { if (!pad.locked) e.preventDefault(); }, { passive: false }));
+  pad.undo = () => { if (pad.locked) return; pad.strokes.pop(); redraw(); };
+  pad.clear = () => { if (pad.locked) return; pad.strokes = []; redraw(); };
+  pad.empty = () => !pad.strokes.some(st => st.length);
+  pad.resize = resize;
+  pad.blob = () => new Promise((res, rej) => {
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    pad.strokes.forEach(st => st.forEach(p => { x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); }));
+    const m = 20, sc = 2, w = Math.max(80, x1 - x0 + 2 * m), h = Math.max(50, y1 - y0 + 2 * m);
+    const off = document.createElement('canvas'); off.width = Math.round(w * sc); off.height = Math.round(h * sc);
+    const o = off.getContext('2d'); o.fillStyle = '#fff'; o.fillRect(0, 0, off.width, off.height);
+    o.setTransform(sc, 0, 0, sc, (m - x0) * sc, (m - y0) * sc); drawAll(o);
+    off.toBlob(b => b ? res(b) : rej({ code: 'image_rejected' }), 'image/png');
+  });
+  resize();
+  return pad;
+}
+window.addEventListener('resize', () => { if (Quiz.pad && Quiz.pad.resize) Quiz.pad.resize(); });
+
+/* ================= Handschrift lesen (Claude, wenn verfügbar) ================= */
+const Recog = {
+  fn: null, ok: false, tier: 'quick', warned: false,
+  async init() {
+    if (!(window.claude && typeof window.claude.use === 'function')) return;
+    try {
+      const s = await window.claude.use('sample'); if (!s) return;
+      const lim = await s.limits().catch(() => null);
+      if (!lim || !lim.images) return;
+      if (lim.modelTiers && !lim.modelTiers.includes('quick')) this.tier = 'default';
+      this.fn = s; this.ok = true;
+    } catch (e) { }
+  },
+  async read(blob, lang, signal) {
+    const prompt = `The image shows a handwritten answer from a vocabulary test written by a German school student. The answer is written in ${lang === 'de' ? 'German' : 'English'}. Transcribe exactly what is written, letter by letter, keeping every spelling mistake. Do not correct, complete or guess the intended word. If nothing is legible, use an empty string. Reply with only JSON: {"text": "<transcription>"}`;
+    const r = await this.fn.json(prompt, { images: [blob], modelTier: this.tier, signal });
+    return String(r && r.text != null ? r.text : '');
+  },
+  fail(e) {
+    const code = e && e.code;
+    const off = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed', 'images_unavailable', 'rate_limited', 'session_expired', 'tools_unavailable'];
+    if (off.includes(code)) {
+      this.ok = false;
+      toast(code === 'rate_limited' ? 'Gerade zu viele Anfragen – vergleiche erstmal selbst' : code === 'not_granted' ? 'Automatisches Lesen ist aus – vergleiche selbst' : 'Automatisches Lesen geht gerade nicht – vergleiche selbst');
+    } else toast('Konnte die Schrift nicht lesen – vergleiche selbst');
+  }
+};
+
+/* ================= Quiz-Engine ================= */
+const Quiz = {
+  cur: null,
+  start(cfg) {
+    // cfg: {mode:'test'|'practice', ids, title, tid, order}
+    closeSheet();
+    let ids = cfg.ids.slice();
+    if (cfg.mode === 'test') { if (cfg.order !== 'book') ids = shuffle(ids); if (cfg.n && cfg.n < ids.length) ids = cfg.order === 'book' ? shuffle(ids).slice(0, cfg.n).sort((a, b) => cfg.ids.indexOf(a) - cfg.ids.indexOf(b)) : ids.slice(0, cfg.n); }
+    const items = ids.map(id => ({ id, need: cfg.mode === 'practice' ? ((prog(id).b || 0) >= 3 ? 1 : 2) : 1, done: 0 }));
+    this.cur = { ...cfg, items, queue: items.slice(), results: [], ctx: {}, xp: 0, answered: 0, streak: 0, bestStreak: 0 };
+    this.next();
+  },
+  progress() {
+    const c = this.cur;
+    if (c.mode === 'test') return { pct: c.results.length / c.items.length * 100, label: (Math.min(c.results.length + 1, c.items.length)) + '/' + c.items.length };
+    const need = c.items.reduce((a, it) => a + it.need, 0), done = c.items.reduce((a, it) => a + Math.min(it.done, it.need), 0);
+    return { pct: done / need * 100, label: c.items.filter(it => it.done >= it.need).length + '/' + c.items.length };
+  },
+  next() {
+    const c = this.cur; hideFb();
+    if (!c.queue.length) return this.finish();
+    const it = c.queue[0]; const x = item(it.id);
+    const type = chooseType(x, c.ctx, c.mode);
+    c.ctx.prevType = c.ctx.lastType; c.ctx.lastType = type;
+    const d = TYPES[type].dir; c.ctx.lastDir = d === 'any' ? (c.ctx.lastDir === 'en2de' ? 'de2en' : 'en2de') : (d === 'v' ? c.ctx.lastDir : d);
+    c.q = buildQ(it.id, type); c.q.item = it; c.pending = null;
+    this.render();
+  },
+  render() {
+    const c = this.cur, q = c.q, pr = this.progress();
+    const lang = q.promptLang;
+    const hint = q.x.isVerb ? (q.sub || '') : hintFor(q.x, lang);
+    let head = `<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="quitQuiz">✕</button><div class="bar ${c.mode === 'practice' ? 'green' : ''}"><i style="width:${pr.pct}%"></i></div><span class="count">${pr.label}</span></div></div>`;
+    let card;
+    if (q.type === 'tf') card = `<div class="qcard"><div class="qlabel">${TYPES.tf.label}</div><div class="tf-pair">${esc(q.prompt)} ${sayBtn(q.prompt)}<span class="eq">=</span><span style="color:#7a5a00">${esc(q.shown)}</span></div>${hint ? `<div class="qhint">${esc(hint)}</div>` : ''}</div>`;
+    else card = `<div class="qcard"><div class="qlabel">${q.label || TYPES[q.type].label}<span class="qflag ${lang}">${lang === 'en' ? 'EN' : 'DE'}</span></div><div class="qword">${esc(q.prompt)}${lang === 'en' && !/___/.test(q.prompt) ? sayBtn(q.prompt) : (q.x.isVerb && lang === 'en' ? sayBtn(q.x.inf) : '')}</div>${hint ? `<div class="qhint">${esc(hint)}</div>` : ''}</div>`;
+    let body = '';
+    if (q.opts) body = `<div class="opts">${q.opts.map((o, i) => `<button class="opt" data-act="mc" data-i="${i}"><span class="k">${i + 1}</span><span>${esc(o)}</span></button>`).join('')}</div><button class="skip" data-act="dunno">Weiß ich nicht</button>`;
+    else if (q.type === 'tf') body = `<div class="tf"><button class="opt" data-act="tf" data-v="1">✓ Stimmt</button><button class="opt" data-act="tf" data-v="0">✗ Stimmt nicht</button></div>`;
+    else if (q.type === 'scramble') body = `<div class="slots" id="slots">${q.built.map((ti, k) => `<button class="tile ${q.mode === 'words' ? 'w' : ''}" data-act="untile" data-k="${k}">${esc(q.tiles[ti].s)}</button>`).join('') || '<span class="muted" style="font-weight:700">Tippe die Teile in der richtigen Reihenfolge</span>'}</div><div class="tiles">${q.tiles.map((t, k) => `<button class="tile ${q.mode === 'words' ? 'w' : ''} ${t.used ? 'used' : ''}" data-act="tile" data-k="${k}">${esc(t.s)}</button>`).join('')}</div><div class="actions"><button class="btn sec" data-act="tileReset">Zurück</button><button class="btn" data-act="check" ${q.built.length === q.tiles.length ? '' : 'disabled'}>Prüfen</button></div><button class="skip" data-act="dunno">Weiß ich nicht</button>`;
+    else if (q.pen) body = `<div class="pad" id="pad"><canvas></canvas><span class="pad-ph">${q.pen.lang === 'de' ? 'Hier auf Deutsch schreiben …' : 'Write here …'}</span></div>
+      <div id="penState"><div class="actions" id="penTools"><button class="btn sec" style="flex:0 0 64px" data-act="penUndo" title="Letzten Strich zurücknehmen">↶</button><button class="btn sec" style="flex:0 0 64px" data-act="penClear" title="Alles löschen">🗑</button><button class="btn" data-act="check">Prüfen</button></div><button class="skip" data-act="dunno">Weiß ich nicht</button></div>`;
+    else if (q.fields) {
+      const de = q.fields.some(f => f.de);
+      body = `<form class="vfields" id="qform" autocomplete="off">${q.fields.map((f, k) => `<div>${f.label ? `<label>${esc(f.label)}</label>` : ''}<input class="inp" id="in${k}" data-k="${k}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="${k === q.fields.length - 1 ? 'done' : 'next'}" placeholder="${de ? 'Auf Deutsch …' : 'In English …'}"></div>`).join('')}</form>
+      ${de ? `<div class="uml">${['ä', 'ö', 'ü', 'ß'].map(u => `<button data-act="uml" data-v="${u}">${u}</button>`).join('')}</div>` : ''}
+      <div class="actions"><button class="btn" data-act="check">Prüfen</button></div><button class="skip" data-act="dunno">Weiß ich nicht</button>`;
+    }
+    openOverlay(head + `<div class="wrap" style="padding-bottom:200px">${card}<div class="qbody">${body}</div></div>`);
+    this.pad = q.pen ? makePad($('#pad')) : null;
+    if (q.fields) { const f = $('#in0'); if (f) setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } }, 60); S.lastInput = f; }
+  },
+  mc(i) {
+    const c = this.cur, q = c.q; if (c.pending) return;
+    const ok = q.opts[i] === q.ans;
+    $$('.opt').forEach((b, k) => { if (q.opts[k] === q.ans) b.classList.add('ok'); else if (k === i) b.classList.add('bad'); else b.classList.add('dim'); });
+    this.answer(ok ? 1 : 0, q.opts[i]);
+  },
+  tf(v) {
+    const c = this.cur, q = c.q; if (c.pending) return;
+    const ok = (v === 1) === q.truth;
+    $$('.tf .opt').forEach((b, k) => { const isTrueBtn = k === 0; if (isTrueBtn === q.truth) b.classList.add('ok'); else b.classList.add('bad'); });
+    this.answer(ok ? 1 : 0, v ? 'Stimmt' : 'Stimmt nicht');
+  },
+  tile(k) { const q = this.cur.q; if (this.cur.pending || q.tiles[k].used) return; q.tiles[k].used = true; q.built.push(k); beep('pop'); this.render(); if (q.built.length === q.tiles.length) this.check(); },
+  untile(k) { const q = this.cur.q; if (this.cur.pending) return; const ti = q.built.splice(k, 1)[0]; q.tiles[ti].used = false; this.render(); },
+  tileReset() { const q = this.cur.q; if (this.cur.pending) return; q.built = []; q.tiles.forEach(t => t.used = false); this.render(); },
+  async penCheck() {
+    const c = this.cur, q = c.q; if (c.pending || q.penBusy || q.selfOpen) return;
+    const pad = this.pad;
+    if (!pad || pad.empty()) { toast('Schreib zuerst etwas ✍️'); return; }
+    pad.locked = true;
+    if (!(Recog.ok && P.set.autoRead)) return this.penSelfOpen();
+    q.penBusy = true; const ctl = new AbortController(); q.penCtl = ctl;
+    $('#penState').innerHTML = `<div class="reading"><span class="spin"></span><b>Claude liest deine Schrift …</b><button class="linkbtn" data-act="penSelfOpen">Lieber selbst vergleichen</button></div>`;
+    try {
+      const blob = await pad.blob();
+      const text = (await Recog.read(blob, q.pen.lang, ctl.signal)).trim();
+      if (this.cur !== c || c.q !== q || q.selfOpen) return;
+      q.penBusy = false;
+      if (!text) { toast('Konnte nichts lesen – vergleiche selbst'); return this.penSelfOpen(); }
+      q.readText = text;
+      const g = grade(text, q.pen.acc, q.pen.other ? { all: q.pen.other } : null);
+      $('#penState').innerHTML = '';
+      return this.answer(g.s, text, [g]);
+    } catch (e) {
+      if (this.cur !== c || c.q !== q || q.selfOpen) return;
+      q.penBusy = false;
+      if (e && e.code === 'cancelled') return;
+      Recog.fail(e);
+      return this.penSelfOpen();
+    }
+  },
+  penSelfOpen() {
+    const c = this.cur, q = c && c.q; if (!q || !q.pen || c.pending) return;
+    if (q.penBusy) { q.penBusy = false; try { q.penCtl.abort(); } catch (e) { } }
+    if (this.pad && this.pad.empty()) { toast('Schreib zuerst etwas ✍️'); return; }
+    q.selfOpen = true; if (this.pad) this.pad.locked = true;
+    $('#penState').innerHTML = `<div class="card selfcheck"><div class="muted" style="font-weight:800">Vergleiche deine Schrift mit der Lösung:</div><div class="sc-sol">${esc(q.pen.sol)}</div><div class="sc-btns"><button class="btn green" data-act="penSelf" data-v="1">✓ Richtig</button><button class="btn yellow" data-act="penSelf" data-v="0.5">≈ Fast</button><button class="btn" data-act="penSelf" data-v="0">✗ Falsch</button></div><div class="muted" style="font-size:12px;font-weight:700;margin-top:8px">„Fast“ = ein kleiner Schreibfehler</div></div>`;
+  },
+  penSelf(v) { const c = this.cur; if (!c || c.pending) return; c.q.selfGraded = true; this.answer(v, '', null, false); },
+  check() {
+    const c = this.cur, q = c.q; if (c.pending) return;
+    if (q.pen) return this.penCheck();
+    if (q.type === 'scramble') {
+      if (q.built.length < q.tiles.length) return;
+      const built = q.built.map(k => q.tiles[k].s).join(q.mode === 'words' ? ' ' : '');
+      const ok = norm(built) === norm(q.target);
+      $('#slots').style.borderColor = ok ? 'var(--green)' : 'var(--wrong)';
+      return this.answer(ok ? 1 : 0, built);
+    }
+    if (q.fields) {
+      const vals = q.fields.map((f, k) => ($('#in' + k) || {}).value || '');
+      if (vals.every(v => !v.trim())) { const f = $('#in0'); f && f.focus(); toast('Schreib etwas – oder tippe „Weiß ich nicht“'); return; }
+      const verb = q.x.isVerb ? { all: uniq([...q.x.infN, ...q.x.pastN, ...q.x.partN]) } : null;
+      let sum = 0; const per = [];
+      q.fields.forEach((f, k) => {
+        const vb = verb ? { all: verb.all.filter(a => !f.acc.includes(a)) } : null;
+        const g = grade(vals[k], f.acc, vb); per.push(g); sum += g.s;
+        const el = $('#in' + k); if (el) { el.classList.add(g.s >= 1 ? 'ok' : g.s > 0 ? 'near' : 'bad'); el.readOnly = true; }
+      });
+      const score = Math.round(sum / q.fields.length * 100) / 100;
+      return this.answer(score, vals.join(' – '), per);
+    }
+  },
+  dunno() { const c = this.cur, q = c.q; if (c.pending) return; if (q.pen) { if (q.penBusy) { q.penBusy = false; try { q.penCtl.abort(); } catch (e) { } } if (this.pad) this.pad.locked = true; const st = $('#penState'); if (st) st.innerHTML = ''; } if (q.opts) $$('.opt').forEach((b, k) => b.classList.add(q.opts[k] === q.ans ? 'ok' : 'dim')); this.answer(0, '', null, true); },
+  solution() {
+    const q = this.cur.q, x = q.x;
+    if (x.isVerb) return `${x.inf} – ${x.past} – ${x.part}`;
+    if (q.type === 'tf') return `${x.en} = ${x.de}`;
+    if (q.type === 'mc_en_de' || q.type === 'type_en_de' || q.type === 'pen_de') return x.de;
+    return x.en;
+  },
+  answer(score, given, per, dunno) {
+    const c = this.cur, q = c.q;
+    c.pending = { score, given, dunno };
+    beep(score >= 1 ? 'ok' : score > 0 ? 'pop' : 'bad');
+    const sol = this.solution();
+    const read = q.readText != null;
+    const typed = !!q.fields || read;
+    let cls, title, extra = '';
+    if (score >= 1) { cls = 'ok'; title = pick(['Richtig! 🎉', 'Super! ✓', 'Genau! 👍', 'Klasse! ⭐', 'Perfekt! 💪']); c.streak++; c.bestStreak = Math.max(c.bestStreak, c.streak); if (c.streak >= 3) extra = `<p>🔥 ${c.streak} richtig in Folge!</p>`; }
+    else if (score > 0) { cls = 'near'; title = q.x.isVerb && q.fields && q.fields.length > 1 ? 'Halb richtig' : 'Fast richtig – achte auf die Schreibweise'; c.streak = 0; }
+    else { cls = 'bad'; title = dunno ? 'Kein Problem – merk es dir:' : (per && per.some(g => g.other) ? 'Das ist die andere Form!' : 'Leider falsch'); c.streak = 0; }
+    const showSol = score < 1 || typed || q.type === 'tf' || q.selfGraded;
+    const sayText = q.x.isVerb ? `${q.x.inf}, ${q.x.pastD}, ${q.x.partD}` : q.x.en;
+    let html = `<h4>${title}</h4>${showSol ? `<p class="sol">${esc(sol)} ${sayBtn(sayText)}</p>` : ''}${read ? `<p class="muted">Claude hat gelesen: „${esc(given)}“</p>` : (score < 1 && typed && given && !dunno ? `<p class="muted">Deine Antwort: ${esc(given)}</p>` : '')}${extra}
+     <div class="row">${score < 1 && typed && !dunno ? `<button class="linkbtn" data-act="override">Ich hatte recht</button>` : ''}<button class="btn ${cls === 'ok' ? 'green' : cls === 'near' ? 'yellow' : ''}" data-act="nextQ" id="nextBtn">Weiter</button></div>`;
+    showFb(cls, html);
+    if (score >= 1 && !typed) c.autoT = setTimeout(() => this.finalize(), 1000);
+    else if (score >= 1) c.autoT = setTimeout(() => this.finalize(), 1500);
+  },
+  override() { const c = this.cur; if (!c.pending) return; c.pending.score = 1; c.pending.overridden = true; this.finalize(); },
+  finalize() {
+    const c = this.cur; if (!c || !c.pending) return;
+    clearTimeout(c.autoT);
+    const { score } = c.pending, it = c.q.item;
+    record(it.id, score, c.q.type);
+    const gain = score >= 1 ? (c.mode === 'test' ? 10 : 6) : score > 0 ? 3 : 0;
+    c.xp += gain; P.xp += gain; c.answered++;
+    c.results.push({ id: it.id, score, type: c.q.type, given: c.pending.given });
+    c.queue.shift();
+    if (c.mode === 'practice') {
+      if (score >= 1) { it.done++; if (it.done < it.need) c.queue.splice(Math.min(c.queue.length, 4 + rnd(3)), 0, it); }
+      else { it.need = Math.min(3, Math.max(it.need, it.done + 1)); c.queue.splice(Math.min(c.queue.length, 2 + rnd(2)), 0, it); }
+    }
+    saveP(); this.next();
+  },
+  quit() {
+    const c = this.cur;
+    if (!c.results.length) return closeOverlay();
+    confirmSheet('Wirklich aufhören?', c.mode === 'test' ? 'Der Test wird nicht gewertet. Deine geübten Wörter bleiben gespeichert.' : 'Dein Fortschritt bis hier ist gespeichert.', 'Beenden', () => { closeSheet(); closeOverlay(); });
+  },
+  finish() {
+    const c = this.cur; hideFb(); c.q = null; c.finished = true;
+    if (c.mode === 'test') {
+      const total = c.results.reduce((a, r) => a + r.score, 0);
+      const pct = Math.round(total / c.results.length * 100);
+      const prev = best(c.tid);
+      const rec = P.t[c.tid] || (P.t[c.tid] = { best: 0, n: 0 });
+      rec.best = Math.max(rec.best || 0, pct); rec.last = pct; rec.n = (rec.n || 0) + 1;
+      const bonus = pct >= PASS ? 30 + starsOf(pct) * 10 : 0; P.xp += bonus; c.xp += bonus;
+      saveP();
+      const st = starsOf(pct);
+      const wrong = c.results.filter(r => r.score < 1);
+      const unlocked = c.fromPath && pct >= PASS && prev < PASS;
+      const emoji = pct >= 95 ? '🏆' : pct >= 80 ? '🎉' : pct >= PASS ? '👍' : pct >= 50 ? '💪' : '📚';
+      const msg = pct >= 95 ? 'Überragend!' : pct >= 80 ? 'Sehr gut gemacht!' : pct >= PASS ? 'Bestanden!' : 'Noch nicht ganz – übe die Fehler und versuch es nochmal.';
+      if (pct >= PASS) { beep('win'); confetti(); }
+      S.lastWrong = uniq(wrong.map(r => r.id));
+      openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><div class="grow"></div></div></div><div class="wrap result">
+       <div class="big-emoji">${emoji}</div><h2>${esc(msg)}</h2><div class="muted" style="font-weight:800">${esc(c.title)}</div>
+       <div class="score-big">${pct}%</div>${starsHtml(st)}
+       <div class="stat-row" style="justify-content:center"><span class="pill">✅ ${c.results.filter(r => r.score >= 1).length} richtig</span><span class="pill">❌ ${wrong.length} Fehler</span><span class="pill">⭐ +${c.xp} XP</span>${pct > prev && prev ? '<span class="pill">📈 neuer Bestwert</span>' : ''}</div>
+       ${unlocked ? `<div class="card" style="margin-top:14px;background:#fff8dc;font-weight:900">🔓 Nächste Station im Lernpfad ist frei!</div>` : ''}
+       <div class="list" style="margin-top:16px">${wrong.length ? `<button class="btn green block" data-act="practiceWrong">🎯 Fehler üben (${S.lastWrong.length})</button>` : ''}<button class="btn sec block" data-act="testRetry">↻ Test wiederholen</button><button class="btn sec block" data-act="close">Fertig</button></div>
+       ${wrong.length ? `<div class="card mistakes"><b>Das solltest du nochmal anschauen:</b>${wrong.map(r => { const x = item(r.id); return `<div class="mrow"><span class="en">${esc(x.isVerb ? x.inf + ' – ' + x.past + ' – ' + x.part : x.en)}</span><span class="muted">${esc(x.de)}</span></div>`; }).join('')}</div>` : ''}
+      </div>`);
+      S.lastTestCfg = { mode: 'test', ids: c.ids, title: c.title, tid: c.tid, order: c.order, n: c.n, fromPath: c.fromPath };
+    } else {
+      const ok = c.results.filter(r => r.score >= 1).length;
+      const acc = Math.round(ok / c.results.length * 100);
+      beep('win'); confetti(); saveP();
+      openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><div class="grow"></div></div></div><div class="wrap result">
+       <div class="big-emoji">💪</div><h2>Übung geschafft!</h2><div class="muted" style="font-weight:800">${esc(c.title)}</div>
+       <div class="stat-row" style="justify-content:center;margin-top:14px"><span class="pill">📚 ${c.items.length} Wörter</span><span class="pill">🎯 ${acc}% Treffer</span><span class="pill">🔥 ${c.bestStreak} in Folge</span><span class="pill">⭐ +${c.xp} XP</span></div>
+       <div class="list" style="margin-top:18px">${c.scope ? `<button class="btn green block" data-act="practice" data-scope="${c.scope}">🎯 Nächste Runde</button>` : ''}${c.tidAfter ? `<button class="btn block" data-act="testStart" data-test="${c.tidAfter}">📝 Zum Test</button>` : ''}<button class="btn sec block" data-act="close">Fertig</button></div></div>`);
+    }
+  }
+};
+function showFb(cls, html) { let f = $('#fb'); f.className = 'fb ' + cls; f.innerHTML = `<div class="wrap">${html}</div>`; requestAnimationFrame(() => f.classList.add('on')); setTimeout(() => { const b = $('#nextBtn'); b && b.focus({ preventScroll: true }); }, 30); }
+function hideFb() { const f = $('#fb'); if (f) { f.classList.remove('on'); f.innerHTML = ''; } }
+
+function startPractice(scope) {
+  let ids, title, tidAfter = null;
+  if (scope === 'problems') { ids = problemWords(); title = 'Problemwörter'; }
+  else if (scope === 'wrong') { ids = S.lastWrong || []; title = 'Fehler üben'; }
+  else { ids = scopeIds(scope); title = scopeTitle(scope); tidAfter = scope === 'verbs' ? 'verbs' : scope; }
+  if (!ids.length) { toast('Keine Wörter zum Üben'); return; }
+  // die 20 schwächsten Wörter, in Buch-Reihenfolge
+  if (ids.length > 20) { const order = ids.slice(); ids = ids.slice().sort((a, b) => ((prog(a).b || 0) - (prog(b).b || 0)) || ((prog(a).s ? 1 : 0) - (prog(b).s ? 1 : 0)) || (order.indexOf(a) - order.indexOf(b))).slice(0, 20); ids = shuffle(ids); }
+  else ids = shuffle(ids);
+  Quiz.start({ mode: 'practice', ids, title, scope: (scope === 'wrong' ? null : scope), tidAfter: tidAfter && tidAfter !== 'problems' ? tidAfter : null });
+}
+
+/* ================= Spiele ================= */
+function viewGames() {
+  const sc = S.gscope || 'all';
+  const chips = [['all', 'Alle'], ...UNITS.map(u => ['unit:' + u.id, u.title.replace('Unit ', 'U')])];
+  return `<div class="wrap"><h2 class="sec-title">Spiele</h2>
+   <div class="card"><b>Welche Wörter?</b><div class="optrow" style="margin-bottom:0">${chips.map(([k, l]) => `<button class="${sc === k ? 'on' : ''}" data-act="gscope" data-v="${k}">${l}</button>`).join('')}</div></div>
+   <div class="list" style="margin-top:12px">
+    <div class="card game-card"><div class="gi" style="background:linear-gradient(150deg,#2a1858,#5b2a8a)">☄️</div><div class="grow"><b style="font-size:18px">Meteor-Alarm</b><div class="muted" style="font-weight:700;font-size:14px">Wörter stürzen vom Himmel. Tippe schnell die richtige Übersetzung, bevor sie einschlagen!</div><div class="hs">🏅 Highscore: ${P.g.meteor || 0}</div></div></div>
+    <button class="btn block" data-act="meteor">☄️ Meteor-Alarm starten</button>
+    <div class="card game-card" style="margin-top:6px"><div class="gi" style="background:linear-gradient(150deg,#d9161d,#ef5a46)">🧠</div><div class="grow"><b style="font-size:18px">Paare finden</b><div class="muted" style="font-weight:700;font-size:14px">Dreh Karten um und finde das englische Wort mit seiner deutschen Bedeutung.</div><div class="hs">🏅 Bestzeit: ${P.g.memTime ? P.g.memTime + ' s · ' + P.g.memMoves + ' Züge' : '–'}</div></div></div>
+    <button class="btn yellow block" data-act="memory">🧠 Paare finden starten</button>
+   </div></div>`;
+}
+const Game = {
+  raf: null, timers: [],
+  stop() { cancelAnimationFrame(this.raf); this.raf = null; this.timers.forEach(clearTimeout); this.timers = []; this.m = null; this.mem = null; },
+  later(fn, ms) { this.timers.push(setTimeout(fn, ms)); },
+  pool(maxLen) { const ids = S.gscope && S.gscope !== 'all' ? scopeIds(S.gscope) : ALL_WORDS; return ids.filter(id => W[id].en.length <= maxLen && W[id].de.length <= maxLen); },
+  /* ---- Meteor ---- */
+  meteor() {
+    this.stop();
+    this.m = { score: 0, lives: 3, combo: 0, dur: 7200, recent: [], pool: this.pool(34), over: false };
+    let stars = ''; for (let i = 0; i < 40; i++) stars += `<i class="star" style="left:${Math.random() * 100}%;top:${Math.random() * 85}%;opacity:${.3 + Math.random() * .7}"></i>`;
+    openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><b class="grow">☄️ Meteor-Alarm</b></div></div><div class="wrap">
+     <div class="hud"><span id="mScore">0 Punkte</span><span id="mCombo" class="muted"></span><span class="lives" id="mLives">❤️❤️❤️</span></div>
+     <div class="sky" id="sky">${stars}<div class="meteor" id="met"></div><div class="ground"></div><div class="flash" id="flash"></div></div>
+     <div class="gopts" id="gopts"></div><p class="muted" style="text-align:center;font-weight:700;font-size:13px">Jede richtige Antwort macht die Meteore schneller.</p></div>`);
+    this.mNext();
+  },
+  mNext() {
+    const m = this.m; if (!m || m.over) return;
+    let id, tries = 0; do { id = pick(m.pool); } while (m.recent.includes(id) && tries++ < 20);
+    m.recent.push(id); if (m.recent.length > 10) m.recent.shift();
+    const w = W[id]; const enTop = Math.random() < .5;
+    m.q = { id, top: enTop ? w.en : w.de, ans: enTop ? w.de : w.en };
+    m.q.opts = shuffle([m.q.ans, ...distractors(w, enTop ? 'de' : 'en', 3)]);
+    m.locked = false;
+    const met = $('#met'); met.className = 'meteor'; met.textContent = m.q.top; met.style.setProperty('--y', '0px');
+    $('#gopts').innerHTML = m.q.opts.map((o, i) => `<button class="opt" data-act="mAns" data-i="${i}">${esc(o)}</button>`).join('');
+    if (enTop && canSpeak && P.set.sound) say(w.en);
+    m.t0 = performance.now();
+    const sky = $('#sky'); const H = sky.clientHeight - 18;
+    const loop = now => {
+      if (!this.m || this.m !== m || m.over) return;
+      const p = (now - m.t0) / m.dur;
+      const y = p * (H + 10);
+      met.style.transform = `translate(-50%, ${y - 50}px)`; met.style.setProperty('--y', (y - 50) + 'px');
+      if (p >= 1) { this.mMiss(true); return; }
+      this.raf = requestAnimationFrame(loop);
+    };
+    cancelAnimationFrame(this.raf); this.raf = requestAnimationFrame(loop);
+  },
+  mAns(i) {
+    const m = this.m; if (!m || m.locked || m.over) return;
+    const ok = m.q.opts[i] === m.q.ans;
+    const btns = $$('#gopts .opt');
+    btns.forEach((b, k) => { if (m.q.opts[k] === m.q.ans) b.classList.add('ok'); else if (k === i) b.classList.add('bad'); });
+    if (ok) {
+      m.locked = true; cancelAnimationFrame(this.raf);
+      m.combo++; const mult = 1 + Math.floor(m.combo / 3); m.score += 10 * mult; m.dur = Math.max(2600, m.dur * .95);
+      record(m.q.id, 1, 'game'); P.xp += 2;
+      $('#met').classList.add('boom'); beep('ok');
+      $('#mScore').textContent = m.score + ' Punkte'; $('#mCombo').textContent = mult > 1 ? `Combo ×${mult}` : (m.combo >= 2 ? m.combo + ' in Folge' : '');
+      this.later(() => this.mNext(), 380);
+    } else this.mMiss(false);
+  },
+  mMiss(ground) {
+    const m = this.m; if (!m || m.locked) return;
+    m.locked = true; cancelAnimationFrame(this.raf);
+    m.lives--; m.combo = 0; beep('bad'); record(m.q.id, 0, 'game');
+    $$('#gopts .opt').forEach((b, k) => { if (m.q.opts[k] === m.q.ans) b.classList.add('ok'); });
+    const fl = $('#flash'); fl.className = 'flash'; void fl.offsetWidth; fl.className = 'flash red';
+    $('#sky').classList.remove('shake'); void $('#sky').offsetWidth; $('#sky').classList.add('shake');
+    $('#mLives').textContent = '❤️'.repeat(Math.max(0, m.lives)) + '🖤'.repeat(3 - Math.max(0, m.lives));
+    $('#mCombo').textContent = ground ? 'Einschlag!' : '';
+    if (m.lives <= 0) { m.over = true; this.later(() => this.mOver(), 1100); }
+    else this.later(() => this.mNext(), 1300);
+  },
+  mOver() {
+    const m = this.m; if (!m) return;
+    const rec = m.score > (P.g.meteor || 0); if (rec) P.g.meteor = m.score;
+    P.xp += Math.round(m.score / 10); saveP();
+    if (rec && m.score > 0) { beep('win'); confetti(); }
+    openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><div class="grow"></div></div></div><div class="wrap result"><div class="big-emoji">${rec ? '🏆' : '💥'}</div><h2>${rec ? 'Neuer Highscore!' : 'Game over'}</h2><div class="score-big">${m.score}</div><div class="muted" style="font-weight:800">Punkte · Highscore ${P.g.meteor}</div>
+     <div class="list" style="margin-top:18px"><button class="btn block" data-act="meteor">☄️ Nochmal</button><button class="btn sec block" data-act="close">Fertig</button></div></div>`);
+    this.m = null;
+  },
+  /* ---- Memory ---- */
+  memory() {
+    this.stop();
+    const pool = shuffle(this.pool(26));
+    const chosen = []; const seenEn = new Set(), seenDe = new Set();
+    for (const id of pool) { const w = W[id]; if (seenEn.has(w.en) || seenDe.has(w.de)) continue; seenEn.add(w.en); seenDe.add(w.de); chosen.push(id); if (chosen.length === 6) break; }
+    const cards = shuffle(chosen.flatMap(id => [{ id, side: 'en', t: W[id].en }, { id, side: 'de', t: W[id].de }]));
+    this.mem = { cards, open: [], done: 0, moves: 0, t0: Date.now(), lock: false };
+    openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><b class="grow">🧠 Paare finden</b><span class="count" id="memInfo">0 Züge</span></div></div><div class="wrap"><p class="muted" style="font-weight:700;margin:4px 4px 6px;font-size:14px">Blau = Englisch · Gelb = Deutsch. Finde die 6 Paare!</p><div class="mem" id="mem">${cards.map((c, i) => `<button class="mc" data-act="memFlip" data-i="${i}"><div class="in"><div class="f">?</div><div class="b ${c.side}">${esc(c.t)}</div></div></button>`).join('')}</div></div>`);
+  },
+  memFlip(i) {
+    const g = this.mem; if (!g || g.lock) return;
+    const el = $$('#mem .mc')[i]; const c = g.cards[i];
+    if (c.done || g.open.includes(i)) return;
+    el.classList.add('open'); g.open.push(i); beep('pop');
+    if (c.side === 'en') say(c.t);
+    if (g.open.length === 2) {
+      g.moves++; $('#memInfo').textContent = g.moves + ' Züge';
+      const [a, b] = g.open.map(k => g.cards[k]);
+      if (a.id === b.id && a.side !== b.side) {
+        g.open.forEach(k => { g.cards[k].done = true; $$('#mem .mc')[k].classList.add('done'); });
+        g.open = []; g.done++; beep('ok'); record(a.id, 1, 'game'); P.xp += 3;
+        if (g.done === 6) this.later(() => this.memWin(), 600);
+      } else {
+        g.lock = true; this.later(() => { g.open.forEach(k => $$('#mem .mc')[k] && $$('#mem .mc')[k].classList.remove('open')); g.open = []; g.lock = false; }, 950);
+      }
+    }
+  },
+  memWin() {
+    const g = this.mem; if (!g) return;
+    const secs = Math.round((Date.now() - g.t0) / 1000);
+    const rec = !P.g.memTime || secs < P.g.memTime; if (rec) { P.g.memTime = secs; P.g.memMoves = g.moves; }
+    P.xp += 15; saveP(); beep('win'); confetti();
+    openOverlay(`<div class="ov-top"><div class="wrap"><button class="xbtn" data-act="close">✕</button><div class="grow"></div></div></div><div class="wrap result"><div class="big-emoji">${rec ? '🏆' : '🧠'}</div><h2>${rec ? 'Neue Bestzeit!' : 'Alle Paare gefunden!'}</h2><div class="score-big">${secs} s</div><div class="muted" style="font-weight:800">${g.moves} Züge · Bestzeit ${P.g.memTime} s</div>
+     <div class="list" style="margin-top:18px"><button class="btn yellow block" data-act="memory">🧠 Nochmal</button><button class="btn sec block" data-act="close">Fertig</button></div></div>`);
+    this.mem = null;
+  }
+};
+
+/* ================= Einstellungen ================= */
+function settingsSheet() {
+  openSheet(`<div class="sheet-h"><h3>⚙️ Einstellungen</h3></div>
+   <button class="toggle" style="width:100%" data-act="setToggle" data-k="sound"><span>🔈 Töne und Vorlesen</span><span class="sw ${P.set.sound ? 'on' : ''}"></span></button>
+   <button class="toggle" style="width:100%" data-act="setToggle" data-k="pen"><span>✍️ Fragen mit dem Stift schreiben</span><span class="sw ${P.set.pen ? 'on' : ''}"></span></button>
+   ${Recog.ok || P.set.autoRead === false ? `<button class="toggle" style="width:100%" data-act="setToggle" data-k="autoRead"><span>🔎 Handschrift automatisch prüfen lassen<small style="display:block;color:var(--muted);font-weight:700;font-size:12px">Claude liest die Schrift – sonst vergleichst du selbst</small></span><span class="sw ${P.set.autoRead ? 'on' : ''}"></span></button>` : ''}
+   <button class="toggle" style="width:100%" data-act="setToggle" data-k="unlockAll"><span>🔓 Alle Stationen im Lernpfad öffnen</span><span class="sw ${P.set.unlockAll ? 'on' : ''}"></span></button>
+   <div class="card" style="margin-top:10px;font-weight:700;font-size:14px"><b>Speicherort:</b> ${Sync.state === 'cloud' ? '☁️ in deinem Claude-Konto und auf diesem Gerät' : '📱 auf diesem Gerät (im Browser)'}<br><span class="muted">Level ${level(P.xp)} · ${P.xp} XP · ${Object.keys(P.w).length} Wörter schon geübt</span></div>
+   <button class="btn sec block" style="margin-top:14px;color:var(--wrong)" data-act="resetAsk">Fortschritt zurücksetzen</button>`);
+}
+
+/* ================= Ereignisse ================= */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const a = el.dataset.act;
+  const fns = {
+    tab: () => setTab(el.dataset.tab),
+    node: () => nodeSheet(+el.dataset.i),
+    verbsSheet, settings: settingsSheet,
+    closeSheet, close: closeOverlay,
+    confirmYes: () => { const f = S.confirmFn; S.confirmFn = null; f && f(); },
+    acc: () => { S.open[el.dataset.k] = !S.open[el.dataset.k]; el.parentElement.classList.toggle('open'); },
+    cards: () => Cards.start(el.dataset.scope),
+    list: () => openList(el.dataset.scope),
+    practice: () => startPractice(el.dataset.scope),
+    practiceProblems: () => startPractice('problems'),
+    practiceWrong: () => startPractice('wrong'),
+    testStart: () => testStartSheet(el.dataset.test),
+    tcfg: () => { S.tcfg[el.dataset.k] = el.dataset.k === 'n' ? +el.dataset.v : el.dataset.v; $$(`[data-act="tcfg"][data-k="${el.dataset.k}"]`).forEach(b => b.classList.toggle('on', b === el)); },
+    testGo: () => { const t = S.tcfg; const nodes = pathNodes(); Quiz.start({ mode: 'test', ids: testIds(t.tid), title: testTitle(t.tid), tid: t.tid, order: t.order, n: t.n, fromPath: nodes.some(n => n.test === t.tid) }); },
+    testRetry: () => Quiz.start(S.lastTestCfg),
+    quitQuiz: () => Quiz.quit(),
+    mc: () => Quiz.mc(+el.dataset.i), tf: () => Quiz.tf(+el.dataset.v),
+    tile: () => Quiz.tile(+el.dataset.k), untile: () => Quiz.untile(+el.dataset.k), tileReset: () => Quiz.tileReset(),
+    penUndo: () => Quiz.pad && Quiz.pad.undo(), penClear: () => Quiz.pad && Quiz.pad.clear(), penSelf: () => Quiz.penSelf(+el.dataset.v), penSelfOpen: () => Quiz.penSelfOpen(),
+    check: () => Quiz.check(), dunno: () => Quiz.dunno(), nextQ: () => Quiz.finalize(), override: () => Quiz.override(),
+    uml: () => { const inp = S.lastInput || $('#in0'); if (!inp || inp.readOnly) return; const s = inp.selectionStart ?? inp.value.length, en = inp.selectionEnd ?? inp.value.length; inp.value = inp.value.slice(0, s) + el.dataset.v + inp.value.slice(en); inp.focus(); inp.setSelectionRange(s + 1, s + 1); },
+    flip: () => Cards.flip(), cardKnow: () => Cards.next(true), cardAgain: () => Cards.next(false),
+    cardDir: () => { Cards.cur.dir = el.dataset.v; Cards.cur.flipped = false; Cards.render(); },
+    cardShuffle: () => { const c = Cards.cur; c.queue = shuffle(c.queue); c.flipped = false; Cards.render(); toast('Gemischt 🔀'); },
+    gscope: () => { S.gscope = el.dataset.v; render(); },
+    meteor: () => Game.meteor(), mAns: () => Game.mAns(+el.dataset.i),
+    memory: () => Game.memory(), memFlip: () => Game.memFlip(+el.dataset.i),
+    setToggle: () => { const k = el.dataset.k; P.set[k] = !P.set[k]; saveP(); settingsSheet(); render(); },
+    resetAsk: () => confirmSheet('Alles zurücksetzen?', 'Alle Ergebnisse, Sterne, XP und Highscores werden gelöscht. Das kann man nicht rückgängig machen.', 'Ja, löschen', () => { const set = P.set; P = freshP(); P.set = set; saveP(); closeSheet(); render(); toast('Fortschritt gelöscht'); })
+  };
+  if (fns[a]) { e.preventDefault(); fns[a](); }
+});
+document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('.inp[data-k]')) S.lastInput = e.target; });
+document.addEventListener('keydown', e => {
+  const ov = $('#overlay').classList.contains('on');
+  if ($('#sheet').classList.contains('on')) { if (e.key === 'Escape') closeSheet(); return; }
+  if (!ov) return;
+  const c = Quiz.cur;
+  if (c && c.q) {
+    if (c.pending) { if (e.key === 'Enter') { e.preventDefault(); Quiz.finalize(); } return; }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (c.q.fields) { const k = +(document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.k : 0); if (c.q.fields.length > 1 && k < c.q.fields.length - 1 && document.activeElement.classList.contains('inp')) { $('#in' + (k + 1)).focus(); return; } Quiz.check(); }
+      else if (c.q.type === 'scramble' || c.q.pen) Quiz.check();
+      return;
+    }
+    if (c.q.opts && /^[1-4]$/.test(e.key)) { Quiz.mc(+e.key - 1); return; }
+    if (c.q.type === 'tf' && (e.key === 'j' || e.key === 'n')) { Quiz.tf(e.key === 'j' ? 1 : 0); return; }
+  }
+  if (Cards.cur && $('.fc')) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); Cards.flip(); } else if (e.key === 'ArrowRight') Cards.next(true); else if (e.key === 'ArrowLeft') Cards.next(false); }
+  if (Game.m && /^[1-4]$/.test(e.key)) Game.mAns(+e.key - 1);
+  if (e.key === 'Escape') { if (c && c.q && !c.finished) Quiz.quit(); else closeOverlay(); }
+});
+document.addEventListener('submit', e => e.preventDefault());
+
+/* ================= Start ================= */
+S.scrollCur = true;
+render();
+setTimeout(() => { Sync.init(); Recog.init(); }, 0);
+window.APP = { W, V, SECS, UNITS, Quiz, Recog, Pad, Cards, Game, get P() { return P; }, norm, rawVariants, acceptEn, acceptDe };
+
+</script>
+</body>
+</html>
